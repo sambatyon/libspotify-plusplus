@@ -1,0 +1,14 @@
+Spotify/Disc
+ - be able to ask an album for the number of discs that it contains
+ - be able to obtain a 'disc' object for each of them (with references to the tracks in parent album)
+
+?? Cache raw pointers in look-up table, or associate userdata with them?
+ - so that we can always return the same C++ handle for the same artist/track/album etc
+   - i.e. when retrieving Album from a track, and from an ArtistBrowse 
+
+Different behaviour on spottily objects while they are loading
+ - throw exception?
+
+Refactor IsLoading() as HasLoaded() to match libspotify
+
+"Loaded Callbacks" where supported
