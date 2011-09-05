@@ -1,7 +1,7 @@
 ABOUT
 ---------------------------
 
-C++ wrapper for the libspotify api provided by spottily.
+C++ wrapper for the libspotify api provided by spotify.
 
 Dependencies
 - libspotify 0.0.8 (as provided by spottily)
