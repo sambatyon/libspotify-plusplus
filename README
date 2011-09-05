@@ -1,3 +1,18 @@
+ABOUT
+---------------------------
+
+C++ wrapper for the libspotify api provided by spottily.
+
+Dependencies
+- libspotify 0.0.8 (as provided by spottily)
+- boost c++ libraries
+
+
+TODO (unordered collection of ideas for forthcoming work)
+---------------------------
+
+Update for libspotify 9
+
 Spotify/Disc
  - be able to ask an album for the number of discs that it contains
  - be able to obtain a 'disc' object for each of them (with references to the tracks in parent album)
