@@ -68,6 +68,23 @@ namespace Spotify
 
 		return review;
 	}
+    
+    int AlbumBrowse::GetNumTracks()
+    {
+        return sp_albumbrowse_num_tracks( m_pAlbumBrowse );
+    }
+    
+    int AlbumBrowse::GetNumDiscs()
+    {
+        /// @todo parse the tracks for this album, to determine their disc indices, and thus the number of discs available
+        return 0;
+    }
+    
+    boost::shared_ptr<Disc> AlbumBrowse::GetDisc( int index )
+    {
+        /// @todo implement this function
+        return boost::shared_ptr<Disc>( NULL );        
+    }
 
 	void SP_CALLCONV AlbumBrowse::callback_albumbrowse_complete( sp_albumbrowse* result, void* userdata )
 	{

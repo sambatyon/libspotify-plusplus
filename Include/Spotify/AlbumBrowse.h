@@ -51,6 +51,14 @@ namespace Spotify
 		std::string GetCopyright( int index );
 		
 		std::string GetReview();
+        
+        int GetNumTracks();
+        
+        boost::shared_ptr<Track> GetTrack( int index );
+        
+        int GetNumDiscs();
+        
+        boost::shared_ptr<Disc> GetDisc( int index );
 
 	protected:
 
