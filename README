@@ -4,7 +4,7 @@ ABOUT
 C++ wrapper for the libspotify api provided by spotify.
 
 Dependencies
-- libspotify 0.0.8 (as provided by spottily)
+- libspotify 0.0.8 (as provided by spotify)
 - boost c++ libraries
 
 
@@ -25,5 +25,6 @@ Different behaviour on spottily objects while they are loading
  - throw exception?
 
 Refactor IsLoading() as HasLoaded() to match libspotify
+ - perhaps refactor all functions to more closely match libspotify api
 
 "Loaded Callbacks" where supported
