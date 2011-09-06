@@ -1,0 +1,386 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		38437A681416AF3F00DD6CAC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38437A671416AF3F00DD6CAC /* Foundation.framework */; };
+		38437A8A1416AF9700DD6CAC /* Album.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A7D1416AF9700DD6CAC /* Album.h */; };
+		38437A8B1416AF9700DD6CAC /* AlbumBrowse.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A7E1416AF9700DD6CAC /* AlbumBrowse.h */; };
+		38437A8C1416AF9700DD6CAC /* Artist.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A7F1416AF9700DD6CAC /* Artist.h */; };
+		38437A8D1416AF9700DD6CAC /* ArtistBrowse.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A801416AF9700DD6CAC /* ArtistBrowse.h */; };
+		38437A8E1416AF9700DD6CAC /* Mutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A821416AF9700DD6CAC /* Mutex.h */; };
+		38437A8F1416AF9700DD6CAC /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A831416AF9700DD6CAC /* Image.h */; };
+		38437A901416AF9700DD6CAC /* PlayList.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A841416AF9700DD6CAC /* PlayList.h */; };
+		38437A911416AF9700DD6CAC /* PlayListContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A851416AF9700DD6CAC /* PlayListContainer.h */; };
+		38437A921416AF9700DD6CAC /* PlayListElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A861416AF9700DD6CAC /* PlayListElement.h */; };
+		38437A931416AF9700DD6CAC /* PlayListFolder.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A871416AF9700DD6CAC /* PlayListFolder.h */; };
+		38437A941416AF9700DD6CAC /* Session.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A881416AF9700DD6CAC /* Session.h */; };
+		38437A951416AF9700DD6CAC /* Track.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437A891416AF9700DD6CAC /* Track.h */; };
+		38437AA91416AF9A00DD6CAC /* Album.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437A991416AF9A00DD6CAC /* Album.cpp */; };
+		38437AAA1416AF9A00DD6CAC /* AlbumBrowse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437A9A1416AF9A00DD6CAC /* AlbumBrowse.cpp */; };
+		38437AAB1416AF9A00DD6CAC /* Artist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437A9B1416AF9A00DD6CAC /* Artist.cpp */; };
+		38437AAC1416AF9A00DD6CAC /* ArtistBrowse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437A9C1416AF9A00DD6CAC /* ArtistBrowse.cpp */; };
+		38437AAD1416AF9A00DD6CAC /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437A9E1416AF9A00DD6CAC /* Mutex.cpp */; };
+		38437AAE1416AF9A00DD6CAC /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA01416AF9A00DD6CAC /* Debug.cpp */; };
+		38437AAF1416AF9A00DD6CAC /* Debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437AA11416AF9A00DD6CAC /* Debug.h */; };
+		38437AB01416AF9A00DD6CAC /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA21416AF9A00DD6CAC /* Image.cpp */; };
+		38437AB11416AF9A00DD6CAC /* PlayList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA31416AF9A00DD6CAC /* PlayList.cpp */; };
+		38437AB21416AF9A00DD6CAC /* PlayListContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA41416AF9A00DD6CAC /* PlayListContainer.cpp */; };
+		38437AB31416AF9A00DD6CAC /* PlayListElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA51416AF9A00DD6CAC /* PlayListElement.cpp */; };
+		38437AB41416AF9A00DD6CAC /* PlayListFolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA61416AF9A00DD6CAC /* PlayListFolder.cpp */; };
+		38437AB51416AF9A00DD6CAC /* Session.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA71416AF9A00DD6CAC /* Session.cpp */; };
+		38437AB61416AF9A00DD6CAC /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA81416AF9A00DD6CAC /* Track.cpp */; };
+		38437AB81416B1F600DD6CAC /* Disc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AB71416B1F600DD6CAC /* Disc.cpp */; };
+		38437ABA1416B20200DD6CAC /* Disc.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437AB91416B20200DD6CAC /* Disc.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		38437A641416AF3F00DD6CAC /* liblibspotify-plusplus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "liblibspotify-plusplus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		38437A671416AF3F00DD6CAC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		38437A7D1416AF9700DD6CAC /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
+		38437A7E1416AF9700DD6CAC /* AlbumBrowse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumBrowse.h; sourceTree = "<group>"; };
+		38437A7F1416AF9700DD6CAC /* Artist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Artist.h; sourceTree = "<group>"; };
+		38437A801416AF9700DD6CAC /* ArtistBrowse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArtistBrowse.h; sourceTree = "<group>"; };
+		38437A821416AF9700DD6CAC /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
+		38437A831416AF9700DD6CAC /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
+		38437A841416AF9700DD6CAC /* PlayList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayList.h; sourceTree = "<group>"; };
+		38437A851416AF9700DD6CAC /* PlayListContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListContainer.h; sourceTree = "<group>"; };
+		38437A861416AF9700DD6CAC /* PlayListElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListElement.h; sourceTree = "<group>"; };
+		38437A871416AF9700DD6CAC /* PlayListFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListFolder.h; sourceTree = "<group>"; };
+		38437A881416AF9700DD6CAC /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		38437A891416AF9700DD6CAC /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		38437A991416AF9A00DD6CAC /* Album.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Album.cpp; sourceTree = "<group>"; };
+		38437A9A1416AF9A00DD6CAC /* AlbumBrowse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlbumBrowse.cpp; sourceTree = "<group>"; };
+		38437A9B1416AF9A00DD6CAC /* Artist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Artist.cpp; sourceTree = "<group>"; };
+		38437A9C1416AF9A00DD6CAC /* ArtistBrowse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArtistBrowse.cpp; sourceTree = "<group>"; };
+		38437A9E1416AF9A00DD6CAC /* Mutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cpp; sourceTree = "<group>"; };
+		38437AA01416AF9A00DD6CAC /* Debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Debug.cpp; sourceTree = "<group>"; };
+		38437AA11416AF9A00DD6CAC /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
+		38437AA21416AF9A00DD6CAC /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Image.cpp; sourceTree = "<group>"; };
+		38437AA31416AF9A00DD6CAC /* PlayList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayList.cpp; sourceTree = "<group>"; };
+		38437AA41416AF9A00DD6CAC /* PlayListContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayListContainer.cpp; sourceTree = "<group>"; };
+		38437AA51416AF9A00DD6CAC /* PlayListElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayListElement.cpp; sourceTree = "<group>"; };
+		38437AA61416AF9A00DD6CAC /* PlayListFolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayListFolder.cpp; sourceTree = "<group>"; };
+		38437AA71416AF9A00DD6CAC /* Session.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Session.cpp; sourceTree = "<group>"; };
+		38437AA81416AF9A00DD6CAC /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Track.cpp; sourceTree = "<group>"; };
+		38437AB71416B1F600DD6CAC /* Disc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Disc.cpp; sourceTree = "<group>"; };
+		38437AB91416B20200DD6CAC /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		38437A611416AF3F00DD6CAC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38437A681416AF3F00DD6CAC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		38437A591416AF3F00DD6CAC = {
+			isa = PBXGroup;
+			children = (
+				38437A661416AF3F00DD6CAC /* Frameworks */,
+				38437A651416AF3F00DD6CAC /* Products */,
+				38437A971416AF9A00DD6CAC /* Source */,
+				38437A7B1416AF9700DD6CAC /* Include */,
+			);
+			sourceTree = "<group>";
+		};
+		38437A651416AF3F00DD6CAC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38437A641416AF3F00DD6CAC /* liblibspotify-plusplus.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		38437A661416AF3F00DD6CAC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				38437A671416AF3F00DD6CAC /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		38437A7B1416AF9700DD6CAC /* Include */ = {
+			isa = PBXGroup;
+			children = (
+				38437A7C1416AF9700DD6CAC /* Spotify */,
+			);
+			path = Include;
+			sourceTree = "<group>";
+		};
+		38437A7C1416AF9700DD6CAC /* Spotify */ = {
+			isa = PBXGroup;
+			children = (
+				38437A7D1416AF9700DD6CAC /* Album.h */,
+				38437A7E1416AF9700DD6CAC /* AlbumBrowse.h */,
+				38437A7F1416AF9700DD6CAC /* Artist.h */,
+				38437A801416AF9700DD6CAC /* ArtistBrowse.h */,
+				38437A811416AF9700DD6CAC /* Core */,
+				38437A831416AF9700DD6CAC /* Image.h */,
+				38437A841416AF9700DD6CAC /* PlayList.h */,
+				38437A851416AF9700DD6CAC /* PlayListContainer.h */,
+				38437A861416AF9700DD6CAC /* PlayListElement.h */,
+				38437A871416AF9700DD6CAC /* PlayListFolder.h */,
+				38437A881416AF9700DD6CAC /* Session.h */,
+				38437A891416AF9700DD6CAC /* Track.h */,
+				38437AB91416B20200DD6CAC /* Disc.h */,
+			);
+			path = Spotify;
+			sourceTree = "<group>";
+		};
+		38437A811416AF9700DD6CAC /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				38437A821416AF9700DD6CAC /* Mutex.h */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		38437A971416AF9A00DD6CAC /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				38437A981416AF9A00DD6CAC /* Spotify */,
+			);
+			path = Source;
+			sourceTree = SOURCE_ROOT;
+		};
+		38437A981416AF9A00DD6CAC /* Spotify */ = {
+			isa = PBXGroup;
+			children = (
+				38437A991416AF9A00DD6CAC /* Album.cpp */,
+				38437A9A1416AF9A00DD6CAC /* AlbumBrowse.cpp */,
+				38437A9B1416AF9A00DD6CAC /* Artist.cpp */,
+				38437A9C1416AF9A00DD6CAC /* ArtistBrowse.cpp */,
+				38437A9D1416AF9A00DD6CAC /* Core */,
+				38437A9F1416AF9A00DD6CAC /* Debug */,
+				38437AA21416AF9A00DD6CAC /* Image.cpp */,
+				38437AA31416AF9A00DD6CAC /* PlayList.cpp */,
+				38437AA41416AF9A00DD6CAC /* PlayListContainer.cpp */,
+				38437AA51416AF9A00DD6CAC /* PlayListElement.cpp */,
+				38437AA61416AF9A00DD6CAC /* PlayListFolder.cpp */,
+				38437AA71416AF9A00DD6CAC /* Session.cpp */,
+				38437AA81416AF9A00DD6CAC /* Track.cpp */,
+				38437AB71416B1F600DD6CAC /* Disc.cpp */,
+			);
+			path = Spotify;
+			sourceTree = "<group>";
+		};
+		38437A9D1416AF9A00DD6CAC /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				38437A9E1416AF9A00DD6CAC /* Mutex.cpp */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		38437A9F1416AF9A00DD6CAC /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				38437AA01416AF9A00DD6CAC /* Debug.cpp */,
+				38437AA11416AF9A00DD6CAC /* Debug.h */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		38437A621416AF3F00DD6CAC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38437A8A1416AF9700DD6CAC /* Album.h in Headers */,
+				38437A8B1416AF9700DD6CAC /* AlbumBrowse.h in Headers */,
+				38437A8C1416AF9700DD6CAC /* Artist.h in Headers */,
+				38437A8D1416AF9700DD6CAC /* ArtistBrowse.h in Headers */,
+				38437A8E1416AF9700DD6CAC /* Mutex.h in Headers */,
+				38437A8F1416AF9700DD6CAC /* Image.h in Headers */,
+				38437A901416AF9700DD6CAC /* PlayList.h in Headers */,
+				38437A911416AF9700DD6CAC /* PlayListContainer.h in Headers */,
+				38437A921416AF9700DD6CAC /* PlayListElement.h in Headers */,
+				38437A931416AF9700DD6CAC /* PlayListFolder.h in Headers */,
+				38437A941416AF9700DD6CAC /* Session.h in Headers */,
+				38437A951416AF9700DD6CAC /* Track.h in Headers */,
+				38437AAF1416AF9A00DD6CAC /* Debug.h in Headers */,
+				38437ABA1416B20200DD6CAC /* Disc.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		38437A631416AF3F00DD6CAC /* libspotify-plusplus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 38437A711416AF3F00DD6CAC /* Build configuration list for PBXNativeTarget "libspotify-plusplus" */;
+			buildPhases = (
+				38437A601416AF3F00DD6CAC /* Sources */,
+				38437A611416AF3F00DD6CAC /* Frameworks */,
+				38437A621416AF3F00DD6CAC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "libspotify-plusplus";
+			productName = "libspotify-plusplus";
+			productReference = 38437A641416AF3F00DD6CAC /* liblibspotify-plusplus.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		38437A5B1416AF3F00DD6CAC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 38437A5E1416AF3F00DD6CAC /* Build configuration list for PBXProject "libspotify-plusplus" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 38437A591416AF3F00DD6CAC;
+			productRefGroup = 38437A651416AF3F00DD6CAC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				38437A631416AF3F00DD6CAC /* libspotify-plusplus */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		38437A601416AF3F00DD6CAC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38437AA91416AF9A00DD6CAC /* Album.cpp in Sources */,
+				38437AAA1416AF9A00DD6CAC /* AlbumBrowse.cpp in Sources */,
+				38437AAB1416AF9A00DD6CAC /* Artist.cpp in Sources */,
+				38437AAC1416AF9A00DD6CAC /* ArtistBrowse.cpp in Sources */,
+				38437AAD1416AF9A00DD6CAC /* Mutex.cpp in Sources */,
+				38437AAE1416AF9A00DD6CAC /* Debug.cpp in Sources */,
+				38437AB01416AF9A00DD6CAC /* Image.cpp in Sources */,
+				38437AB11416AF9A00DD6CAC /* PlayList.cpp in Sources */,
+				38437AB21416AF9A00DD6CAC /* PlayListContainer.cpp in Sources */,
+				38437AB31416AF9A00DD6CAC /* PlayListElement.cpp in Sources */,
+				38437AB41416AF9A00DD6CAC /* PlayListFolder.cpp in Sources */,
+				38437AB51416AF9A00DD6CAC /* Session.cpp in Sources */,
+				38437AB61416AF9A00DD6CAC /* Track.cpp in Sources */,
+				38437AB81416B1F600DD6CAC /* Disc.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		38437A6F1416AF3F00DD6CAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		38437A701416AF3F00DD6CAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		38437A721416AF3F00DD6CAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libspotify_plusplus.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					./Include,
+					"../libspotify-9.1.44-iOS/include",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		38437A731416AF3F00DD6CAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libspotify_plusplus.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					./Include,
+					"../libspotify-9.1.44-iOS/include",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		38437A5E1416AF3F00DD6CAC /* Build configuration list for PBXProject "libspotify-plusplus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38437A6F1416AF3F00DD6CAC /* Debug */,
+				38437A701416AF3F00DD6CAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		38437A711416AF3F00DD6CAC /* Build configuration list for PBXNativeTarget "libspotify-plusplus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38437A721416AF3F00DD6CAC /* Debug */,
+				38437A731416AF3F00DD6CAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 38437A5B1416AF3F00DD6CAC /* Project object */;
+}
