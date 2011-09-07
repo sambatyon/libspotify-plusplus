@@ -36,6 +36,7 @@
 		38437AB61416AF9A00DD6CAC /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AA81416AF9A00DD6CAC /* Track.cpp */; };
 		38437AB81416B1F600DD6CAC /* Disc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38437AB71416B1F600DD6CAC /* Disc.cpp */; };
 		38437ABA1416B20200DD6CAC /* Disc.h in Headers */ = {isa = PBXBuildFile; fileRef = 38437AB91416B20200DD6CAC /* Disc.h */; };
+		385745E21417F35E0089EEBF /* boost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 385745E11417F35E0089EEBF /* boost.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,7 @@
 		38437AA81416AF9A00DD6CAC /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Track.cpp; sourceTree = "<group>"; };
 		38437AB71416B1F600DD6CAC /* Disc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Disc.cpp; sourceTree = "<group>"; };
 		38437AB91416B20200DD6CAC /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
+		385745E11417F35E0089EEBF /* boost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boost.framework; path = ../boostoniphone/framework/boost.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38437A681416AF3F00DD6CAC /* Foundation.framework in Frameworks */,
+				385745E21417F35E0089EEBF /* boost.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +107,7 @@
 		38437A661416AF3F00DD6CAC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				385745E11417F35E0089EEBF /* boost.framework */,
 				38437A671416AF3F00DD6CAC /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -331,12 +335,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/libspotify_plusplus.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../boostoniphone/framework\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					./Include,
 					"../libspotify-9.1.44-iOS/include",
 				);
+				INSTALL_PATH = /usr/local/lib;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -347,12 +356,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/libspotify_plusplus.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../boostoniphone/framework\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					./Include,
 					"../libspotify-9.1.44-iOS/include",
 				);
+				INSTALL_PATH = /usr/local/lib;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
