@@ -17,8 +17,18 @@
 
 #pragma once
 
+// std includes
+#include <vector>
+
+// boost includes
+#include <boost/shared_ptr.hpp>
+
 namespace Spotify
 {
+    // forward declaration
+    class Track;
+    class Album;
+    
     /// @class Disc
     /// @brief A collection of tracks making up a disc of an album
     /// @brief (where an album could have multiple discs)

@@ -102,7 +102,9 @@ namespace Spotify
 		
 	bool PlayList::IsLoading( bool recursive )
 	{		
-		bool isLoaded = sp_playlist_is_loaded( m_pPlayList );
+		//bool isLoaded = sp_playlist_is_loaded( m_pPlayList );
+                
+        
 		int numTracks = GetNumTracks();
 
 		// is playlist, or any of its' tracks loading?

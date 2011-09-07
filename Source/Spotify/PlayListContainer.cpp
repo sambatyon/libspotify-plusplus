@@ -15,8 +15,6 @@
  * 
  */
 
-#pragma once
-
 // c-lib includes
 #include <assert.h>
 

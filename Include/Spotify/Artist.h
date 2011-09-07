@@ -53,7 +53,7 @@ namespace Spotify
 
 	protected:
 
-		friend ArtistBrowse;
+		friend class ArtistBrowse;
 
 		sp_artist*		m_pArtist;
 		boost::shared_ptr<Session>	m_session;

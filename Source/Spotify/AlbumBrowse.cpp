@@ -19,6 +19,7 @@
 #include "Spotify/AlbumBrowse.h"
 #include "Spotify/Session.h"
 #include "Spotify/Album.h"
+#include "Spotify/Disc.h"
 
 namespace Spotify
 {
@@ -83,7 +84,7 @@ namespace Spotify
     boost::shared_ptr<Disc> AlbumBrowse::GetDisc( int index )
     {
         /// @todo implement this function
-        return boost::shared_ptr<Disc>( NULL );        
+        return boost::shared_ptr<Disc>();        
     }
 
 	void SP_CALLCONV AlbumBrowse::callback_albumbrowse_complete( sp_albumbrowse* result, void* userdata )

@@ -73,7 +73,7 @@ namespace Spotify
 		
 		virtual void		Update();
 
-		virtual void		Login( const char* username, const char* password );
+		virtual void		Login( const char* username, const char* password, bool rememberMe = false );
 		virtual void		Logout();
 		
 		virtual bool		IsLoggedIn();

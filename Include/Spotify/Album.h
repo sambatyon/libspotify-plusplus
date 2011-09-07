@@ -57,7 +57,7 @@ namespace Spotify
 		virtual boost::shared_ptr<Artist> GetArtist();
 
 	protected:
-		friend AlbumBrowse;
+		friend class AlbumBrowse;
 
 		sp_album*		m_pAlbum;
 		boost::shared_ptr<Session>	m_session;

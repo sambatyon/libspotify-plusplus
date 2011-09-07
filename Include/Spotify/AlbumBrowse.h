@@ -33,7 +33,8 @@ namespace Spotify
 	class Album;
 	class Artist;
 	class Track;
-
+    class Disc;
+    
 	class AlbumBrowse
 	{
 	public:

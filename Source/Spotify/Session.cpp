@@ -134,11 +134,11 @@ namespace Spotify
 		}
 	}
 
-	void Session::Login( const char* username, const char* password )
+	void Session::Login( const char* username, const char* password, bool rememberMe )
 	{				
 		m_hasLoggedOut = false;
 		
-		sp_session_login( m_pSession, username, password );		
+		sp_session_login( m_pSession, username, password, rememberMe );		
 	}
 
 	void Session::Logout()

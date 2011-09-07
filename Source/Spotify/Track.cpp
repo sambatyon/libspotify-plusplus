@@ -133,7 +133,6 @@ namespace Spotify
 
 	void Track::SetStarred( bool isStarred )
 	{		
-		const sp_track* tracks[] = { m_pTrack };
-		sp_track_set_starred( m_session->m_pSession, tracks, 1, isStarred );
+		sp_track_set_starred( m_session->m_pSession, &m_pTrack, 1, isStarred );
 	}
 }
