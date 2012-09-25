@@ -16,19 +16,19 @@
  */
 
 // Includes
-#include "Spotify/Session.h"
+#include "spotify/Session.hpp"
 
-#include "Spotify/Album.h"
-#include "Spotify/Artist.h"
-#include "Spotify/Image.h"
-#include "Spotify/PlayList.h"
-#include "Spotify/PlayListContainer.h"
-#include "Spotify/PlayListElement.h"
-#include "Spotify/PlayListFolder.h"
-#include "Spotify/Track.h"
+#include "spotify/Album.hpp"
+#include "spotify/Artist.hpp"
+#include "spotify/Image.hpp"
+#include "spotify/PlayList.hpp"
+#include "spotify/PlayListContainer.hpp"
+#include "spotify/PlayListElement.hpp"
+#include "spotify/PlayListFolder.hpp"
+#include "spotify/Track.hpp"
 
 // debugging
-#include "Debug/Debug.h"
+#include "Debug/Debug.hpp"
 #define LOG( msg, ... )	//Debug::PrintLine( msg, __VA_ARGS__ );
 
 namespace Spotify

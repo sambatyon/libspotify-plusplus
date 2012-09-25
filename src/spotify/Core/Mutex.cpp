@@ -15,7 +15,7 @@
  * 
  */
 
-#include "Spotify/Core/Mutex.h"
+#include "spotify/Core/Mutex.hpp"
 
 namespace Spotify { namespace Core 
 {

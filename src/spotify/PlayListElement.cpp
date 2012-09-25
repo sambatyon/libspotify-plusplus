@@ -15,8 +15,8 @@
  * 
  */
 
-#include "Spotify/PlayListElement.h"
-#include "Spotify/Session.h"
+#include "spotify/PlayListElement.hpp"
+#include "spotify/Session.hpp"
 
 
 namespace Spotify

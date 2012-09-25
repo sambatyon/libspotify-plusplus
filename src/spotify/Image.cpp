@@ -16,8 +16,8 @@
  */
 
 // local includes
-#include "Spotify/Image.h"
-#include "Spotify/Session.h"
+#include "spotify/Image.hpp"
+#include "spotify/Session.hpp"
 
 namespace Spotify
 {

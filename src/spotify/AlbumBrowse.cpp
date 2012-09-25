@@ -16,10 +16,10 @@
  */
 
 // local includes
-#include "Spotify/AlbumBrowse.h"
-#include "Spotify/Session.h"
-#include "Spotify/Album.h"
-#include "Spotify/Disc.h"
+#include "spotify/AlbumBrowse.hpp"
+#include "spotify/Session.hpp"
+#include "spotify/Album.hpp"
+#include "spotify/Disc.hpp"
 
 namespace Spotify
 {

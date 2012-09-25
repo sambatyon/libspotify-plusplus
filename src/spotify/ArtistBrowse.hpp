@@ -18,9 +18,9 @@
 #pragma once
 
 // local includes
-#include "Spotify/Image.h"
-#include "Spotify/Track.h"
-#include "Spotify/Album.h"
+#include "spotify/Image.hpp"
+#include "spotify/Track.hpp"
+#include "spotify/Album.hpp"
 
 // std include
 #include <string>

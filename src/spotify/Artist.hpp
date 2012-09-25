@@ -18,7 +18,7 @@
 #pragma once
 
 // Local includes
-#include "Spotify/ArtistBrowse.h"
+#include "spotify/ArtistBrowse.hpp"
 
 // std include
 #include <string>

@@ -16,7 +16,7 @@
  */
 
 // local includes
-#include "Spotify/Artist.h"
+#include "spotify/Artist.hpp"
 
 namespace Spotify
 {

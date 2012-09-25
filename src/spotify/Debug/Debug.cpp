@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "Spotify/Core/Mutex.h"
+#include "spotify/Core/Mutex.hpp"
 
 namespace Spotify { namespace Debug
 {

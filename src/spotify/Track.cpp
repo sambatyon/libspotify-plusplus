@@ -16,11 +16,11 @@
  */
 
 // lib includes
-#include "Spotify/Track.h"
-#include "Spotify/Session.h"
+#include "spotify/Track.hpp"
+#include "spotify/Session.hpp"
 
 // Local includes
-#include "Debug/Debug.h"
+#include "Debug/Debug.hpp"
 
 namespace Spotify
 {

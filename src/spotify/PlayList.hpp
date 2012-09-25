@@ -25,7 +25,7 @@
 #include "libspotify/api.h"
 
 // local includes
-#include "Spotify/PlayListElement.h"
+#include "spotify/PlayListElement.hpp"
 
 // boost includes
 #include <boost/shared_ptr.hpp>

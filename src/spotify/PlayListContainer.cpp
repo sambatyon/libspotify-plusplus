@@ -19,12 +19,12 @@
 #include <assert.h>
 
 // local includes
-#include "Spotify/PlayListContainer.h"
-#include "Spotify/PlayListFolder.h"
-#include "Spotify/Session.h"
+#include "spotify/PlayListContainer.hpp"
+#include "spotify/PlayListFolder.hpp"
+#include "spotify/Session.hpp"
 
 // debugging
-#include "Debug/Debug.h"
+#include "Debug/Debug.hpp"
 #define LOG( msg, ... )	//Debug::PrintLine( msg, __VA_ARGS__ );
 
 namespace Spotify

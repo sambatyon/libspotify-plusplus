@@ -16,6 +16,6 @@
  */
 
 // local includes
-#include "Spotify/Disc.h"
+#include "spotify/Disc.hpp"
 
 /// @todo implement this

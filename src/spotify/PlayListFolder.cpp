@@ -16,10 +16,10 @@
  */
 
 // Lib Includes
-#include "Spotify/PlayListFolder.h"
+#include "spotify/PlayListFolder.hpp"
 
 // Local Includes
-#include "Debug/Debug.h"
+#include "Debug/Debug.hpp"
 
 namespace Spotify
 {
