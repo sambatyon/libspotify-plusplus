@@ -19,7 +19,7 @@
 #include "spotify/Session.hpp"
 
 
-namespace Spotify {
+namespace spotify {
 PlayListElement::PlayListElement(boost::shared_ptr<Session> session) : m_session(session), m_pUserData(NULL) {
 }
 

@@ -21,7 +21,7 @@
 #include "spotify/Session.hpp"
 #include "spotify/Artist.hpp"
 
-namespace Spotify {
+namespace spotify {
 Album::Album(boost::shared_ptr<Session> session) {
     m_session = session;
     m_pAlbum = NULL;

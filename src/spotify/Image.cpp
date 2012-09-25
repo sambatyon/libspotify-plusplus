@@ -19,7 +19,7 @@
 #include "spotify/Image.hpp"
 #include "spotify/Session.hpp"
 
-namespace Spotify {
+namespace spotify {
 Image::Image(boost::shared_ptr<Session> session) {
     m_session = session;
     m_pImage = NULL;

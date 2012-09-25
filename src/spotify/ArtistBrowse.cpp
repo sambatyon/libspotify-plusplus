@@ -20,7 +20,7 @@
 #include "spotify/Session.hpp"
 #include "spotify/Artist.hpp"
 
-namespace Spotify {
+namespace spotify {
 ArtistBrowse::ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Artist> artist) {
     m_session = session;
     m_artist = artist;

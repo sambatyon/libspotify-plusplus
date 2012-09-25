@@ -31,7 +31,7 @@
 #include "Debug/Debug.hpp"
 #define LOG( msg, ... )	//Debug::PrintLine( msg, __VA_ARGS__ );
 
-namespace Spotify {
+namespace spotify {
 Session::Config::Config() {
     m_appKey = NULL;
     m_appKeySize = 0;

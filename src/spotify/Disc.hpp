@@ -23,7 +23,7 @@
 // boost includes
 #include <boost/shared_ptr.hpp>
 
-namespace Spotify {
+namespace spotify {
 // forward declaration
 class Track;
 class Album;

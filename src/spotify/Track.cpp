@@ -22,7 +22,7 @@
 // Local includes
 #include "Debug/Debug.hpp"
 
-namespace Spotify {
+namespace spotify {
 
 Track::Track(boost::shared_ptr<Session> session) : PlayListElement(session) {
 }

@@ -18,7 +18,7 @@
 // local includes
 #include "spotify/Artist.hpp"
 
-namespace Spotify {
+namespace spotify {
 
 Artist::Artist(boost::shared_ptr<Session> session) {
     m_pArtist = NULL;

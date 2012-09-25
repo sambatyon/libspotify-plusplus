@@ -17,7 +17,7 @@
 
 #pragma once
 
-namespace Spotify {
+namespace spotify {
 namespace Debug {
 void PrintLine(const char *msg, ...);
 

@@ -17,7 +17,7 @@
 
 #include "spotify/Core/Mutex.hpp"
 
-namespace Spotify {
+namespace spotify {
 namespace Core {
 Mutex::Mutex(const char *name) {
 }

@@ -22,7 +22,7 @@
 
 #include "spotify/Core/Mutex.hpp"
 
-namespace Spotify {
+namespace spotify {
 namespace Debug {
 namespace {
 Core::Mutex g_mutex;

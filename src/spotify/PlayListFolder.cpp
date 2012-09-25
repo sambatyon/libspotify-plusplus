@@ -21,7 +21,7 @@
 // Local Includes
 #include "Debug/Debug.hpp"
 
-namespace Spotify {
+namespace spotify {
 PlayListFolder::PlayListFolder(boost::shared_ptr<Session> session) : PlayListElement(session), m_pContainer(NULL), m_containerIndex(-1) {
 }
 

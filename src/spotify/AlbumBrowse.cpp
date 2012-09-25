@@ -21,7 +21,7 @@
 #include "spotify/Album.hpp"
 #include "spotify/Disc.hpp"
 
-namespace Spotify {
+namespace spotify {
 AlbumBrowse::AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album) {
     m_session = session;
     m_album = album;
