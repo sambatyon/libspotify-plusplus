@@ -67,10 +67,10 @@ private:
 
     static void SP_CALLCONV callback_albumbrowse_complete(sp_albumbrowse *result, void *userdata);
 
-    boost::shared_ptr<Session> m_session;
-    boost::shared_ptr<Album> m_album;
+    boost::shared_ptr<Session> session_;
+    boost::shared_ptr<Album> album_;
 
-    sp_albumbrowse	*m_pAlbumBrowse;
+    sp_albumbrowse	*pAlbumBrowse_;
 };
 
 }

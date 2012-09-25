@@ -67,12 +67,12 @@ public:
 
 protected:
 
-    boost::weak_ptr<PlayListElement>	m_parent;
+    boost::weak_ptr<PlayListElement>	parent_;
 
-    boost::shared_ptr<Session>	m_session;
+    boost::shared_ptr<Session>	session_;
 
 private:
-    void				*m_pUserData;
+    void				*pUserData_;
 };
 
 }

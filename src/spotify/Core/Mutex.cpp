@@ -26,25 +26,25 @@ Mutex::~Mutex() {
 }
 
 bool Mutex::TryLock() {
-    return m_mutex.try_lock();
+    return mutex_.try_lock();
 }
 
 void Mutex::Lock() {
-    m_mutex.lock();
+    mutex_.lock();
 }
 
 void Mutex::Unlock() {
-    m_mutex.unlock();
+    mutex_.unlock();
 }
 
 ScopedLock::ScopedLock(Mutex *pMutex) {
-    m_pMutex = pMutex;
-    m_pMutex->Lock();
+    pMutex_ = pMutex;
+    pMutex_->Lock();
 }
 
 ScopedLock::~ScopedLock() {
-    m_pMutex->Unlock();
-    m_pMutex = NULL;
+    pMutex_->Unlock();
+    pMutex_ = NULL;
 }
 
 } // Core

@@ -28,7 +28,7 @@
 #define LOG( msg, ... )		//Debug::PrintLine( msg, __VA_ARGS__ )
 
 namespace spotify {
-PlayList::PlayList(boost::shared_ptr<Session> session) : PlayListElement(session), m_pPlayList(NULL), m_isLoading(false) {
+PlayList::PlayList(boost::shared_ptr<Session> session) : PlayListElement(session), m_pPlayList(NULL), isLoading_(false) {
 }
 
 PlayList::~PlayList() {
@@ -40,16 +40,16 @@ PlayListElement::eType PlayList::GetType() {
 }
 
 bool PlayList::Load(sp_playlist *playlist) {
-    m_pPlayList = playlist;
+    pPlayList_ = playlist;
     sp_playlist_add_ref(playlist);
 
     sp_playlist_callbacks callbacks;
     GetCallbacks(callbacks);
 
-    sp_playlist_add_callbacks(m_pPlayList, &callbacks, this);
+    sp_playlist_add_callbacks(pPlayList_, &callbacks, this);
 
-    if (!sp_playlist_is_loaded(m_pPlayList)) {
-        m_isLoading = true;
+    if (!sp_playlist_is_loaded(pPlayList_)) {
+        isLoading_ = true;
     } else {
         LoadTracks();
     }
@@ -58,51 +58,51 @@ bool PlayList::Load(sp_playlist *playlist) {
 }
 
 void PlayList::LoadTracks() {
-    int numTracks = sp_playlist_num_tracks(m_pPlayList);
+    int numTracks = sp_playlist_num_tracks(pPlayList_);
 
-    m_tracks.empty();
-    m_tracks.reserve(numTracks);
+    tracks_.empty();
+    tracks_.reserve(numTracks);
 
     for (int j = 0; j < numTracks; j++) {
-        sp_track *t = sp_playlist_track(m_pPlayList, j);
+        sp_track *t = sp_playlist_track(pPlayList_, j);
 
-        boost::shared_ptr<Track> track = m_session->CreateTrack();
+        boost::shared_ptr<Track> track = session_->CreateTrack();
         track->Load(t);
 
-        m_tracks.push_back(track);
+        tracks_.push_back(track);
     }
 }
 
 void PlayList::Unload() {
-    if (m_pPlayList) {
+    if (pPlayList_) {
         sp_playlist_callbacks callbacks;
         GetCallbacks(callbacks);
 
-        sp_playlist_remove_callbacks(m_pPlayList, &callbacks, this);
+        sp_playlist_remove_callbacks(pPlayList_, &callbacks, this);
 
-        sp_playlist_release(m_pPlayList);
-        m_tracks.clear();
+        sp_playlist_release(pPlayList_);
+        tracks_.clear();
 
-        m_isLoading = false;
-        m_pPlayList = NULL;
+        isLoading_ = false;
+        pPlayList_ = NULL;
     }
 }
 
 bool PlayList::IsLoading(bool recursive) {
-    //bool isLoaded = sp_playlist_is_loaded( m_pPlayList );
+    //bool isLoaded = sp_playlist_is_loaded( pPlayList_ );
 
 
     int numTracks = GetNumTracks();
 
     // is playlist, or any of its' tracks loading?
 
-    if (m_isLoading) {
+    if (isLoading_) {
         return true;
     }
 
     if (recursive) {
         for (int i = 0; i < numTracks; i++) {
-            if (m_tracks[i]->IsLoading(recursive)) {
+            if (tracks_[i]->IsLoading(recursive)) {
                 return true;
             }
         }
@@ -112,28 +112,28 @@ bool PlayList::IsLoading(bool recursive) {
 }
 
 int PlayList::GetNumTracks() {
-    return m_tracks.size();
+    return tracks_.size();
 }
 
 boost::shared_ptr<Track> PlayList::GetTrack(int index) {
-    return m_tracks[ index ];
+    return tracks_[ index ];
 }
 
 std::string PlayList::GetName() {
-    const char *name = sp_playlist_name(m_pPlayList);
+    const char *name = sp_playlist_name(pPlayList_);
     return name;
 }
 
 bool PlayList::HasChildren() {
-    return !m_tracks.empty();
+    return !tracks_.empty();
 }
 
 int PlayList::GetNumChildren() {
-    return m_tracks.size();
+    return tracks_.size();
 }
 
 boost::shared_ptr<PlayListElement> PlayList::GetChild(int index) {
-    return m_tracks[index];
+    return tracks_[index];
 }
 
 void PlayList::DumpToTTY(int level) {
@@ -166,7 +166,7 @@ void PlayList::GetCallbacks(sp_playlist_callbacks &callbacks) {
 
 PlayList *PlayList::GetPlayListFromUserData(sp_playlist *pl, void *userdata) {
     PlayList *pPlayList = reinterpret_cast<PlayList *>(userdata);
-    assert(pPlayList->m_pPlayList == pl);
+    assert(pPlayList->pPlayList_ == pl);
 
     return pPlayList;
 }
@@ -243,12 +243,12 @@ void PlayList::OnPlaylistRenamed() {
 }
 
 void PlayList::OnPlaylistStateChanged() {
-    bool isLoaded = sp_playlist_is_loaded(m_pPlayList);
+    bool isLoaded = sp_playlist_is_loaded(pPlayList_);
 
-    LOG("PlayList::OnPlaylistStateChanged [0x%08X] m_isLoading [%d] isLoaded [%d]", this, m_isLoading, isLoaded);
+    LOG("PlayList::OnPlaylistStateChanged [0x%08X] m_isLoading [%d] isLoaded [%d]", this, isLoading_, isLoaded);
 
-    if (m_isLoading && isLoaded) {
-        m_isLoading = false;
+    if (isLoading_ && isLoaded) {
+        isLoading_ = false;
 
         LoadTracks();
     }

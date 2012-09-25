@@ -32,30 +32,30 @@ Track::~Track() {
 }
 
 bool Track::Load(sp_track *track) {
-    m_pTrack = track;
-    sp_track_add_ref(m_pTrack);
+    pTrack_ = track;
+    sp_track_add_ref(pTrack_);
     return true;
 }
 
 void Track::Unload() {
-    sp_track_release(m_pTrack);
-    m_pTrack = NULL;
+    sp_track_release(pTrack_);
+    pTrack_ = NULL;
 }
 
 bool Track::IsLoading(bool recursive) {
-    if (!sp_track_is_loaded(m_pTrack))
+    if (!sp_track_is_loaded(pTrack_))
         return true;
 
     return false;
 }
 
 std::string Track::GetName() {
-    const char *name = sp_track_name(m_pTrack);
+    const char *name = sp_track_name(pTrack_);
     return name;
 }
 
 int Track::GetDuration() {
-    int duration = sp_track_duration(m_pTrack);
+    int duration = sp_track_duration(pTrack_);
     return duration;
 }
 
@@ -83,36 +83,36 @@ void Track::DumpToTTY(int level) {
 }
 
 int Track::GetNumArtists() {
-    return sp_track_num_artists(m_pTrack);
+    return sp_track_num_artists(pTrack_);
 }
 
 boost::shared_ptr<Artist> Track::GetArtist(int index) {
-    boost::shared_ptr<Artist> artist = m_session->CreateArtist();
-    artist->Load(sp_track_artist(m_pTrack, index));
+    boost::shared_ptr<Artist> artist = session_->CreateArtist();
+    artist->Load(sp_track_artist(pTrack_, index));
 
     return artist;
 }
 
 boost::shared_ptr<Album> Track::GetAlbum() {
-    boost::shared_ptr<Album> album = m_session->CreateAlbum();
-    album->Load(sp_track_album(m_pTrack));
+    boost::shared_ptr<Album> album = session_->CreateAlbum();
+    album->Load(sp_track_album(pTrack_));
 
     return album;
 }
 
 int Track::GetDisc() {
-    return sp_track_disc(m_pTrack);
+    return sp_track_disc(pTrack_);
 }
 
 int Track::GetPopularity() {
-    return sp_track_popularity(m_pTrack);
+    return sp_track_popularity(pTrack_);
 }
 
 bool Track::IsStarred() {
-    return sp_track_is_starred(m_session->m_pSession, m_pTrack);
+    return sp_track_is_starred(m_session->m_pSession, pTrack_);
 }
 
 void Track::SetStarred(bool isStarred) {
-    sp_track_set_starred(m_session->m_pSession, &m_pTrack, 1, isStarred);
+    sp_track_set_starred(m_session->m_pSession, &pTrack_, 1, isStarred);
 }
 }

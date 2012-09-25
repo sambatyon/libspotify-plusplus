@@ -50,14 +50,14 @@ public:
     struct Config {
         Config();
 
-        const uint8_t	*m_appKey;
-        size_t			m_appKeySize;
-        const char		*m_cacheLocation;
-        const char		*m_settingsLocation;
-        const char		*m_userAgent;
-        bool			m_compressPlaylists;
-        bool			m_dontSaveMetadataForPlaylists;
-        bool			m_initiallyUnloadPlaylists;
+        const uint8_t	*appKey_;
+        size_t			appKeySize_;
+        const char		*cacheLocation_;
+        const char		*settingsLocation_;
+        const char		*userAgent_;
+        bool			compressPlaylists_;
+        bool			dontSaveMetadataForPlaylists_;
+        bool			initiallyUnloadPlaylists_;
 
     };
 
@@ -148,13 +148,13 @@ private:
     static void SP_CALLCONV callback_stop_playback(sp_session *session);
     static void SP_CALLCONV callback_get_audio_buffer_stats(sp_session *session, sp_audio_buffer_stats *stats);
 
-    sp_session		*m_pSession;
+    sp_session		*pSession_;
 
-    volatile bool	m_isProcessEventsRequired;
+    volatile bool	isProcessEventsRequired_;
 
-    volatile bool	m_hasLoggedOut;
+    volatile bool	hasLoggedOut_;
 
-    boost::shared_ptr<Track>	m_track;		// currently playing track
+    boost::shared_ptr<Track>	track_;		// currently playing track
 };
 
 }

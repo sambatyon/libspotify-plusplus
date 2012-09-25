@@ -32,7 +32,7 @@ public:
     void		Unlock();
 
 private:
-    boost::mutex	m_mutex;
+    boost::mutex	mutex_;
 };
 
 class ScopedLock {
@@ -40,7 +40,7 @@ public:
     ScopedLock(Mutex *pMutex);
     virtual ~ScopedLock();
 private:
-    Mutex		*m_pMutex;
+    Mutex		*pMutex_;
 };
 
 }

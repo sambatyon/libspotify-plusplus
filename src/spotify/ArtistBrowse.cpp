@@ -22,49 +22,49 @@
 
 namespace spotify {
 ArtistBrowse::ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Artist> artist) {
-    m_session = session;
-    m_artist = artist;
+    session_ = session;
+    artist_ = artist;
 
-    m_pArtistBrowse = sp_artistbrowse_create(session->m_pSession, artist->m_pArtist, callback_artistbrowse_complete, this);
+    m_pArtistBrowse = sp_artistbrowse_create(session->m_pSession, artist->pArtist_, callback_artistbrowse_complete, this);
 }
 
 ArtistBrowse::~ArtistBrowse() {
-    sp_artistbrowse_release(m_pArtistBrowse);
+    sp_artistbrowse_release(pArtistBrowse_);
 }
 
 bool ArtistBrowse::IsLoading() {
-    return !sp_artistbrowse_is_loaded(m_pArtistBrowse);
+    return !sp_artistbrowse_is_loaded(pArtistBrowse_);
 }
 
 boost::shared_ptr<Artist> ArtistBrowse::GetArtist() {
-    sp_artist *pArtist = sp_artistbrowse_artist(m_pArtistBrowse);
+    sp_artist *pArtist = sp_artistbrowse_artist(pArtistBrowse_);
 
-    boost::shared_ptr<Artist> artist = m_session->CreateArtist();
+    boost::shared_ptr<Artist> artist = session_->CreateArtist();
     artist->Load(pArtist);
 
     return artist;
 }
 
 int ArtistBrowse::GetNumPortraits() {
-    return sp_artistbrowse_num_portraits(m_pArtistBrowse);
+    return sp_artistbrowse_num_portraits(pArtistBrowse_);
 }
 
 boost::shared_ptr<Image> ArtistBrowse::GetPortrait(int index) {
-    boost::shared_ptr<Image> image = m_session->CreateImage();
+    boost::shared_ptr<Image> image = session_->CreateImage();
 
-    image->Load(sp_artistbrowse_portrait(m_pArtistBrowse, index));
+    image->Load(sp_artistbrowse_portrait(pArtistBrowse_, index));
 
     return image;
 }
 
 int ArtistBrowse::GetNumTracks() {
-    return sp_artistbrowse_num_tracks(m_pArtistBrowse);
+    return sp_artistbrowse_num_tracks(pArtistBrowse_);
 }
 
 boost::shared_ptr<Track> ArtistBrowse::GetTrack(int index) {
-    boost::shared_ptr<Track> track = m_session->CreateTrack();
+    boost::shared_ptr<Track> track = session_->CreateTrack();
 
-    sp_track *pTrack = sp_artistbrowse_track(m_pArtistBrowse, index);
+    sp_track *pTrack = sp_artistbrowse_track(pArtistBrowse_, index);
 
     track->Load(pTrack);
 
@@ -72,13 +72,13 @@ boost::shared_ptr<Track> ArtistBrowse::GetTrack(int index) {
 }
 
 int ArtistBrowse::GetNumAlbums() {
-    return sp_artistbrowse_num_albums(m_pArtistBrowse);
+    return sp_artistbrowse_num_albums(pArtistBrowse_);
 }
 
 boost::shared_ptr<Album> ArtistBrowse::GetAlbum(int index) {
-    boost::shared_ptr<Album> album = m_session->CreateAlbum();
+    boost::shared_ptr<Album> album = session_->CreateAlbum();
 
-    sp_album *pAlbum = sp_artistbrowse_album(m_pArtistBrowse, index);
+    sp_album *pAlbum = sp_artistbrowse_album(pArtistBrowse_, index);
 
     album->Load(pAlbum);
 
@@ -86,20 +86,20 @@ boost::shared_ptr<Album> ArtistBrowse::GetAlbum(int index) {
 }
 
 int ArtistBrowse::GetNumSimilarArtists() {
-    return sp_artistbrowse_num_similar_artists(m_pArtistBrowse);
+    return sp_artistbrowse_num_similar_artists(pArtistBrowse_);
 }
 
 boost::shared_ptr<Artist> ArtistBrowse::GetSimilarArtist(int index) {
-    boost::shared_ptr<Artist> artist = m_session->CreateArtist();
+    boost::shared_ptr<Artist> artist = session_->CreateArtist();
 
-    sp_artist *pArtist = sp_artistbrowse_similar_artist(m_pArtistBrowse, index);
+    sp_artist *pArtist = sp_artistbrowse_similar_artist(pArtistBrowse_, index);
     artist->Load(pArtist);
 
     return artist;
 }
 
 std::string ArtistBrowse::GetBiography() {
-    std::string biography = sp_artistbrowse_biography(m_pArtistBrowse);
+    std::string biography = sp_artistbrowse_biography(pArtistBrowse_);
 
     return biography;
 }
@@ -107,7 +107,7 @@ std::string ArtistBrowse::GetBiography() {
 void SP_CALLCONV ArtistBrowse::callback_artistbrowse_complete(sp_artistbrowse *result, void *userdata) {
     ArtistBrowse *pArtistBrowse = reinterpret_cast<ArtistBrowse *>(userdata);
 
-    BOOST_ASSERT(pArtistBrowse->m_pArtistBrowse == result);
+    BOOST_ASSERT(pArtistBrowse->pArtistBrowse_ == result);
 
     pArtistBrowse->OnComplete();
 }

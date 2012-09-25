@@ -23,46 +23,46 @@
 
 namespace spotify {
 AlbumBrowse::AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album) {
-    m_session = session;
-    m_album = album;
+    session_ = session;
+    album_ = album;
 
-    m_pAlbumBrowse = sp_albumbrowse_create(session->m_pSession, album->m_pAlbum, callback_albumbrowse_complete, this);
+    m_pAlbumBrowse = sp_albumbrowse_create(session->m_pSession, album->pAlbum_, callback_albumbrowse_complete, this);
 }
 
 AlbumBrowse::~AlbumBrowse() {
-    sp_albumbrowse_release(m_pAlbumBrowse);
+    sp_albumbrowse_release(pAlbumBrowse_);
 }
 
 bool AlbumBrowse::IsLoading() {
-    return !sp_albumbrowse_is_loaded(m_pAlbumBrowse);
+    return !sp_albumbrowse_is_loaded(pAlbumBrowse_);
 }
 
 boost::shared_ptr<Album> AlbumBrowse::GetAlbum() {
-    return m_album;
+    return album_;
 }
 
 boost::shared_ptr<Artist> AlbumBrowse::GetArtist() {
-    return m_album->GetArtist();
+    return album_->GetArtist();
 }
 
 int AlbumBrowse::GetNumCopyrights() {
-    return sp_albumbrowse_num_copyrights(m_pAlbumBrowse);
+    return sp_albumbrowse_num_copyrights(pAlbumBrowse_);
 }
 
 std::string AlbumBrowse::GetCopyright(int index) {
-    std::string copyright = sp_albumbrowse_copyright(m_pAlbumBrowse, index);
+    std::string copyright = sp_albumbrowse_copyright(pAlbumBrowse_, index);
 
     return copyright;
 }
 
 std::string AlbumBrowse::GetReview() {
-    std::string review = sp_albumbrowse_review(m_pAlbumBrowse);
+    std::string review = sp_albumbrowse_review(pAlbumBrowse_);
 
     return review;
 }
 
 int AlbumBrowse::GetNumTracks() {
-    return sp_albumbrowse_num_tracks(m_pAlbumBrowse);
+    return sp_albumbrowse_num_tracks(pAlbumBrowse_);
 }
 
 int AlbumBrowse::GetNumDiscs() {
@@ -78,7 +78,7 @@ boost::shared_ptr<Disc> AlbumBrowse::GetDisc(int index) {
 void SP_CALLCONV AlbumBrowse::callback_albumbrowse_complete(sp_albumbrowse *result, void *userdata) {
     AlbumBrowse *pAlbumBrowse = reinterpret_cast<AlbumBrowse *>(userdata);
 
-    BOOST_ASSERT(pAlbumBrowse->m_pAlbumBrowse == result);
+    BOOST_ASSERT(pAlbumBrowse->pAlbumBrowse_ == result);
 
     pAlbumBrowse->OnComplete();
 }

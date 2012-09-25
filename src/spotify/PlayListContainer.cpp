@@ -28,7 +28,7 @@
 #define LOG( msg, ... )	//Debug::PrintLine( msg, __VA_ARGS__ );
 
 namespace spotify {
-PlayListContainer::PlayListContainer(boost::shared_ptr<Session> session) : PlayListElement(session), m_pContainer(NULL), m_isLoading(false) {
+PlayListContainer::PlayListContainer(boost::shared_ptr<Session> session) : PlayListElement(session), m_pContainer(NULL), isLoading_(false) {
 }
 
 PlayListContainer::~PlayListContainer() {
@@ -49,35 +49,35 @@ void PlayListContainer::GetCallbacks(sp_playlistcontainer_callbacks &callbacks) 
 }
 
 bool PlayListContainer::Load(sp_playlistcontainer *container) {
-    m_pContainer = container;
+    pContainer_ = container;
 
     sp_playlistcontainer_callbacks callbacks;
     GetCallbacks(callbacks);
 
-    sp_playlistcontainer_add_callbacks(m_pContainer, &callbacks, this);
+    sp_playlistcontainer_add_callbacks(pContainer_, &callbacks, this);
 
-    m_isLoading = true;
+    isLoading_ = true;
 
     return true;
 }
 
 void PlayListContainer::Unload() {
-    if (m_pContainer) {
+    if (pContainer_) {
         sp_playlistcontainer_callbacks callbacks;
         GetCallbacks(callbacks);
 
-        sp_playlistcontainer_remove_callbacks(m_pContainer, &callbacks, this);
+        sp_playlistcontainer_remove_callbacks(pContainer_, &callbacks, this);
 
-        m_pContainer = NULL;
+        pContainer_ = NULL;
 
-        m_playLists.clear();
+        playLists_.clear();
 
-        m_isLoading = false;
+        isLoading_ = false;
     }
 }
 
 bool PlayListContainer::IsLoading(bool recursive) {
-    if (m_isLoading) {
+    if (isLoading_) {
         return true;
     }
 
@@ -85,7 +85,7 @@ bool PlayListContainer::IsLoading(bool recursive) {
         int numPlayLists = GetNumChildren();
 
         for (int i = 0; i < numPlayLists; i++) {
-            if (m_playLists[i]->IsLoading(recursive)) {
+            if (playLists_[i]->IsLoading(recursive)) {
                 return true;
             }
         }
@@ -96,19 +96,19 @@ bool PlayListContainer::IsLoading(bool recursive) {
 
 void PlayListContainer::AddPlayList(boost::shared_ptr<PlayListElement> playList) {
     playList->SetParent(shared_from_this());
-    m_playLists.push_back(playList);
+    playLists_.push_back(playList);
 }
 
 bool PlayListContainer::HasChildren() {
-    return !m_playLists.empty();
+    return !playLists_.empty();
 }
 
 int PlayListContainer::GetNumChildren() {
-    return m_playLists.size();
+    return playLists_.size();
 }
 
 boost::shared_ptr<PlayListElement> PlayListContainer::GetChild(int index) {
-    return m_playLists[index];
+    return playLists_[index];
 }
 
 void PlayListContainer::DumpToTTY(int level) {
@@ -129,7 +129,7 @@ std::string PlayListContainer::GetName() {
 
 PlayListContainer *PlayListContainer::GetPlayListContainer(sp_playlistcontainer *pc, void *userdata) {
     PlayListContainer *pContainer = reinterpret_cast<PlayListContainer *>(userdata);
-    assert(pContainer->m_pContainer == pc);
+    assert(pContainer->pContainer_ == pc);
 
     return pContainer;
 }
@@ -152,7 +152,7 @@ void PlayListContainer::callback_playlist_moved(sp_playlistcontainer *pc, sp_pla
 void PlayListContainer::callback_container_loaded(sp_playlistcontainer *pc, void *userdata) {
     PlayListContainer *pContainer = GetPlayListContainer(pc, userdata);
 
-    pContainer->m_isLoading = false;
+    pContainer->isLoading_ = false;
 
     pContainer->OnContainerLoaded();
 }
@@ -172,18 +172,18 @@ void PlayListContainer::OnPlaylistMoved(sp_playlist *playlist, int position, int
 void PlayListContainer::OnContainerLoaded() {
     LOG("OnContainerLoaded");
 
-    int numPlaylists = sp_playlistcontainer_num_playlists(m_pContainer);
+    int numPlaylists = sp_playlistcontainer_num_playlists(pContainer_);
 
     boost::shared_ptr<PlayListElement> itContainer = shared_from_this();
 
     for (int i = 0; (i < numPlaylists); i++) {
-        sp_playlist_type type = sp_playlistcontainer_playlist_type(m_pContainer, i);
+        sp_playlist_type type = sp_playlistcontainer_playlist_type(pContainer_, i);
 
         switch (type) {
             case SP_PLAYLIST_TYPE_PLAYLIST: {
-                sp_playlist *p = sp_playlistcontainer_playlist(m_pContainer, i);
+                sp_playlist *p = sp_playlistcontainer_playlist(pContainer_, i);
 
-                boost::shared_ptr<PlayList> playList = m_session->CreatePlayList();
+                boost::shared_ptr<PlayList> playList = session_->CreatePlayList();
                 playList->Load(p);
 
                 itContainer->AddPlayList(playList);
@@ -191,8 +191,8 @@ void PlayListContainer::OnContainerLoaded() {
             break;
 
             case SP_PLAYLIST_TYPE_START_FOLDER: {
-                boost::shared_ptr<PlayListFolder> folder = m_session->CreatePlayListFolder();
-                folder->Load(m_pContainer, i);
+                boost::shared_ptr<PlayListFolder> folder = session_->CreatePlayListFolder();
+                folder->Load(pContainer_, i);
 
                 itContainer->AddPlayList(folder);
                 itContainer = folder;

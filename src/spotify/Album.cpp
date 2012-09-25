@@ -23,25 +23,25 @@
 
 namespace spotify {
 Album::Album(boost::shared_ptr<Session> session) {
-    m_session = session;
-    m_pAlbum = NULL;
+    session_ = session;
+    pAlbum_ = NULL;
 }
 
 Album::~Album() {
-    sp_album_release(m_pAlbum);
+    sp_album_release(pAlbum_);
 }
 
 void Album::Load(sp_album *pAlbum) {
-    m_pAlbum = pAlbum;
-    sp_album_add_ref(m_pAlbum);
+    pAlbum_ = pAlbum;
+    sp_album_add_ref(pAlbum_);
 }
 
 bool Album::IsLoading() {
-    return !sp_album_is_loaded(m_pAlbum);
+    return !sp_album_is_loaded(pAlbum_);
 }
 
 std::string Album::GetName() {
-    return sp_album_name(m_pAlbum);
+    return sp_album_name(pAlbum_);
 }
 
 boost::shared_ptr<Image> Album::GetImage() {
@@ -49,13 +49,13 @@ boost::shared_ptr<Image> Album::GetImage() {
         return boost::shared_ptr<Image>();
     }
 
-    const byte *album_id = sp_album_cover(m_pAlbum);
+    const byte *album_id = sp_album_cover(pAlbum_);
 
     if (album_id == NULL) {
         return boost::shared_ptr<Image>();
     }
 
-    boost::shared_ptr<Image> image = m_session->CreateImage();
+    boost::shared_ptr<Image> image = session_->CreateImage();
 
     if (image->Load(album_id)) {
         return image;
@@ -66,13 +66,13 @@ boost::shared_ptr<Image> Album::GetImage() {
 }
 
 boost::shared_ptr<AlbumBrowse> Album::Browse() {
-    return boost::shared_ptr<AlbumBrowse>(new AlbumBrowse(m_session, boost::dynamic_pointer_cast<Album>(shared_from_this())));
+    return boost::shared_ptr<AlbumBrowse>(new AlbumBrowse(session_, boost::dynamic_pointer_cast<Album>(shared_from_this())));
 }
 
 boost::shared_ptr<Artist> Album::GetArtist() {
-    sp_artist *pArtist = sp_album_artist(m_pAlbum);
+    sp_artist *pArtist = sp_album_artist(pAlbum_);
 
-    boost::shared_ptr<Artist> artist = m_session->CreateArtist();
+    boost::shared_ptr<Artist> artist = session_->CreateArtist();
 
     artist->Load(pArtist);
 

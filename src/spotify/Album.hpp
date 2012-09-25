@@ -57,8 +57,8 @@ public:
 protected:
     friend class AlbumBrowse;
 
-    sp_album		*m_pAlbum;
-    boost::shared_ptr<Session>	m_session;
+    sp_album		*pAlbum_;
+    boost::shared_ptr<Session>	session_;
 };
 
 }

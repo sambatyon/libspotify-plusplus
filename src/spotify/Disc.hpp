@@ -44,8 +44,8 @@ public:
 private:
 
     /// @todo be careful that Disc and Album don't have shared_ptr's pointing at each other..  weak_ref?
-    boost::shared_ptr<Album> m_album;
+    boost::shared_ptr<Album> album_;
 
-    std::vector< boost::shared_ptr<Track> > m_tracks;
+    std::vector< boost::shared_ptr<Track> > tracks_;
 };
 }

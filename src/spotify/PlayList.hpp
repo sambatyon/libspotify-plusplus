@@ -91,11 +91,11 @@ private:
     static void GetCallbacks(sp_playlist_callbacks &callbacks);
     static PlayList *GetPlayListFromUserData(sp_playlist *pl, void *userdata);
 
-    sp_playlist *m_pPlayList;
+    sp_playlist *pPlayList_;
 
-    bool m_isLoading;
+    bool isLoading_;
 
     typedef std::vector< boost::shared_ptr<Track> > TrackStore;
-    TrackStore		m_tracks;
+    TrackStore		tracks_;
 };
 }

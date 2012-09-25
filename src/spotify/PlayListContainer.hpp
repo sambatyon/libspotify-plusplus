@@ -76,11 +76,11 @@ private:
     static PlayListContainer *GetPlayListContainer(sp_playlistcontainer *pc, void *userdata);
 
 
-    sp_playlistcontainer	*m_pContainer;
+    sp_playlistcontainer	*pContainer_;
 
-    bool	m_isLoading;
+    bool	isLoading_;
 
     typedef std::vector< boost::shared_ptr<PlayListElement> >	PlayListStore;
-    PlayListStore					m_playLists;
+    PlayListStore					playLists_;
 };
 }

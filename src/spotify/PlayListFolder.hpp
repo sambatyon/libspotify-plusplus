@@ -62,9 +62,9 @@ public:
 private:
 
     typedef std::vector< boost::shared_ptr<PlayListElement> >	PlayListStore;
-    PlayListStore					m_playLists;
+    PlayListStore					playLists_;
 
-    sp_playlistcontainer			*m_pContainer;
-    int								m_containerIndex;
+    sp_playlistcontainer			*pContainer_;
+    int								containerIndex_;
 };
 }

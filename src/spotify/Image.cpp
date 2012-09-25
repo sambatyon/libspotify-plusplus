@@ -21,8 +21,8 @@
 
 namespace spotify {
 Image::Image(boost::shared_ptr<Session> session) {
-    m_session = session;
-    m_pImage = NULL;
+    session_ = session;
+    pImage_ = NULL;
 }
 
 Image::~Image() {
@@ -30,24 +30,24 @@ Image::~Image() {
 }
 
 bool Image::Load(const byte *image_id) {
-    m_pImage = sp_image_create(m_session->m_pSession, image_id);
+    m_pImage = sp_image_create(m_session->pSession_, image_id);
 
-    return (m_pImage != NULL);
+    return (pImage_ != NULL);
 }
 
 void Image::Unload() {
-    if (m_pImage) {
-        sp_image_release(m_pImage);
-        m_pImage = NULL;
+    if (pImage_) {
+        sp_image_release(pImage_);
+        pImage_ = NULL;
     }
 }
 
 bool Image::IsLoading() {
-    if (NULL == m_pImage) {
+    if (NULL == pImage_) {
         return false;
     }
 
-    if (!sp_image_is_loaded(m_pImage)) {
+    if (!sp_image_is_loaded(pImage_)) {
         return true;
     }
 
@@ -57,7 +57,7 @@ bool Image::IsLoading() {
 const void *Image::GetData(size_t &outDataSize) {
     outDataSize = 0;
 
-    if (NULL == m_pImage) {
+    if (NULL == pImage_) {
         return NULL;
     }
 
@@ -65,6 +65,6 @@ const void *Image::GetData(size_t &outDataSize) {
         return NULL;
     }
 
-    return sp_image_data(m_pImage, &outDataSize);
+    return sp_image_data(pImage_, &outDataSize);
 }
 }

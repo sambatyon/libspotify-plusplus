@@ -77,6 +77,6 @@ public:
 private:
     friend class Session;
 
-    sp_track	*m_pTrack;
+    sp_track	*pTrack_;
 };
 }

@@ -71,10 +71,10 @@ private:
 
     static void SP_CALLCONV callback_artistbrowse_complete(sp_artistbrowse *result, void *userdata);
 
-    boost::shared_ptr<Session> m_session;
-    boost::shared_ptr<Artist> m_artist;
+    boost::shared_ptr<Session> session_;
+    boost::shared_ptr<Artist> artist_;
 
-    sp_artistbrowse *m_pArtistBrowse;
+    sp_artistbrowse *pArtistBrowse_;
 };
 
 
