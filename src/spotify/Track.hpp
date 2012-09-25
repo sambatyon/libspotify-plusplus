@@ -4,15 +4,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 #pragma once
@@ -31,54 +31,52 @@
 // boost includes
 #include <boost/shared_ptr.hpp>
 
-namespace Spotify
-{
-	// forward declaration
-	class Session;
+namespace Spotify {
+// forward declaration
+class Session;
 
-	class Track : public PlayListElement
-	{
-	public:
-		Track( boost::shared_ptr<Session> session );
-		virtual ~Track();
+class Track : public PlayListElement {
+public:
+    Track(boost::shared_ptr<Session> session);
+    virtual ~Track();
 
-		virtual bool Load( sp_track* track );
+    virtual bool Load(sp_track *track);
 
-		virtual void Unload();
+    virtual void Unload();
 
-		virtual bool IsLoading( bool recursive );
+    virtual bool IsLoading(bool recursive);
 
-		virtual std::string GetName();
+    virtual std::string GetName();
 
-		virtual int GetDuration();
+    virtual int GetDuration();
 
-		virtual bool HasChildren();
-		
-		virtual int GetNumChildren();
+    virtual bool HasChildren();
 
-		virtual boost::shared_ptr<PlayListElement> GetChild( int index );
+    virtual int GetNumChildren();
 
-		virtual eType GetType();
-	
-		virtual int GetNumArtists();
+    virtual boost::shared_ptr<PlayListElement> GetChild(int index);
 
-		virtual boost::shared_ptr<Artist> GetArtist( int index );
+    virtual eType GetType();
 
-		virtual boost::shared_ptr<Album> GetAlbum();
+    virtual int GetNumArtists();
 
-		virtual int GetDisc();
+    virtual boost::shared_ptr<Artist> GetArtist(int index);
 
-		virtual int GetPopularity();
+    virtual boost::shared_ptr<Album> GetAlbum();
 
-		virtual bool IsStarred();
+    virtual int GetDisc();
 
-		virtual void SetStarred( bool isStarred );
-		
-		virtual void DumpToTTY( int level = 0 );
+    virtual int GetPopularity();
 
-	private:
-		friend class Session;
+    virtual bool IsStarred();
 
-		sp_track*	m_pTrack;
-	};
+    virtual void SetStarred(bool isStarred);
+
+    virtual void DumpToTTY(int level = 0);
+
+private:
+    friend class Session;
+
+    sp_track	*m_pTrack;
+};
 }

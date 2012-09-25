@@ -4,15 +4,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 // c-lib includes
@@ -27,221 +27,193 @@
 #include "Debug/Debug.hpp"
 #define LOG( msg, ... )	//Debug::PrintLine( msg, __VA_ARGS__ );
 
-namespace Spotify
-{
-	PlayListContainer::PlayListContainer( boost::shared_ptr<Session> session ) : PlayListElement( session ), m_pContainer(NULL), m_isLoading(false)
-	{
-	}
+namespace Spotify {
+PlayListContainer::PlayListContainer(boost::shared_ptr<Session> session) : PlayListElement(session), m_pContainer(NULL), m_isLoading(false) {
+}
 
-	PlayListContainer::~PlayListContainer()
-	{
-		Unload();
-	}
+PlayListContainer::~PlayListContainer() {
+    Unload();
+}
 
-	PlayListElement::eType PlayListContainer::GetType()
-	{
-		return PLAYLIST_CONTAINER;
-	}
+PlayListElement::eType PlayListContainer::GetType() {
+    return PLAYLIST_CONTAINER;
+}
 
-	void PlayListContainer::GetCallbacks( sp_playlistcontainer_callbacks& callbacks )
-	{
-		memset( &callbacks, 0, sizeof(callbacks) );
+void PlayListContainer::GetCallbacks(sp_playlistcontainer_callbacks &callbacks) {
+    memset(&callbacks, 0, sizeof(callbacks));
 
-		callbacks.container_loaded = callback_container_loaded;
-		callbacks.playlist_added = callback_playlist_added;
-		callbacks.playlist_moved = callback_playlist_moved;
-		callbacks.playlist_removed = callback_playlist_removed;
-	}
+    callbacks.container_loaded = callback_container_loaded;
+    callbacks.playlist_added = callback_playlist_added;
+    callbacks.playlist_moved = callback_playlist_moved;
+    callbacks.playlist_removed = callback_playlist_removed;
+}
 
-	bool PlayListContainer::Load( sp_playlistcontainer* container )
-	{
-		m_pContainer = container;
+bool PlayListContainer::Load(sp_playlistcontainer *container) {
+    m_pContainer = container;
 
-		sp_playlistcontainer_callbacks callbacks;
-		GetCallbacks( callbacks );
+    sp_playlistcontainer_callbacks callbacks;
+    GetCallbacks(callbacks);
 
-		sp_playlistcontainer_add_callbacks( m_pContainer, &callbacks, this );
+    sp_playlistcontainer_add_callbacks(m_pContainer, &callbacks, this);
 
-		m_isLoading = true;
+    m_isLoading = true;
 
-		return true;
-	}
+    return true;
+}
 
-	void PlayListContainer::Unload()
-	{
-		if (m_pContainer)
-		{
-			sp_playlistcontainer_callbacks callbacks;
-			GetCallbacks( callbacks );
+void PlayListContainer::Unload() {
+    if (m_pContainer) {
+        sp_playlistcontainer_callbacks callbacks;
+        GetCallbacks(callbacks);
 
-			sp_playlistcontainer_remove_callbacks( m_pContainer, &callbacks, this );
+        sp_playlistcontainer_remove_callbacks(m_pContainer, &callbacks, this);
 
-			m_pContainer = NULL;
+        m_pContainer = NULL;
 
-			m_playLists.clear();
+        m_playLists.clear();
 
-			m_isLoading = false;
-		}
-	}	
+        m_isLoading = false;
+    }
+}
 
-	bool PlayListContainer::IsLoading( bool recursive )
-	{
-		if ( m_isLoading )
-		{
-			return true;
-		}
+bool PlayListContainer::IsLoading(bool recursive) {
+    if (m_isLoading) {
+        return true;
+    }
 
-		if (recursive)
-		{
-			int numPlayLists = GetNumChildren();
-			for (int i=0; i<numPlayLists; i++)
-			{
-				if (m_playLists[i]->IsLoading( recursive ))
-				{
-					return true;
-				}
-			}
-		}
+    if (recursive) {
+        int numPlayLists = GetNumChildren();
 
-		return false;
-	}
+        for (int i = 0; i < numPlayLists; i++) {
+            if (m_playLists[i]->IsLoading(recursive)) {
+                return true;
+            }
+        }
+    }
 
-	void PlayListContainer::AddPlayList( boost::shared_ptr<PlayListElement> playList )
-	{
-		playList->SetParent( shared_from_this() );
-		m_playLists.push_back( playList );
-	}
+    return false;
+}
 
-	bool PlayListContainer::HasChildren()
-	{
-		return !m_playLists.empty();
-	}
+void PlayListContainer::AddPlayList(boost::shared_ptr<PlayListElement> playList) {
+    playList->SetParent(shared_from_this());
+    m_playLists.push_back(playList);
+}
 
-	int PlayListContainer::GetNumChildren()
-	{
-		return m_playLists.size();
-	}
+bool PlayListContainer::HasChildren() {
+    return !m_playLists.empty();
+}
 
-	boost::shared_ptr<PlayListElement> PlayListContainer::GetChild( int index )
-	{
-		return m_playLists[index];
-	}
+int PlayListContainer::GetNumChildren() {
+    return m_playLists.size();
+}
 
-	void PlayListContainer::DumpToTTY( int level )
-	{
-		Debug::PrintLine(level, "PlayListContainer" );
+boost::shared_ptr<PlayListElement> PlayListContainer::GetChild(int index) {
+    return m_playLists[index];
+}
 
-		level ++;
+void PlayListContainer::DumpToTTY(int level) {
+    Debug::PrintLine(level, "PlayListContainer");
 
-		int numPlayLists = GetNumChildren();
-		for (int i=0; i<numPlayLists; i++)
-		{
-			GetChild(i)->DumpToTTY( level );
-		}
-	}
+    level ++;
 
-	std::string PlayListContainer::GetName()
-	{
-		return "Container";
-	}
+    int numPlayLists = GetNumChildren();
 
-	PlayListContainer* PlayListContainer::GetPlayListContainer( sp_playlistcontainer* pc, void* userdata )
-	{
-		PlayListContainer* pContainer = reinterpret_cast<PlayListContainer*>( userdata );
-		assert( pContainer->m_pContainer == pc );
+    for (int i = 0; i < numPlayLists; i++) {
+        GetChild(i)->DumpToTTY(level);
+    }
+}
 
-		return pContainer;
-	}
+std::string PlayListContainer::GetName() {
+    return "Container";
+}
 
-	void PlayListContainer::callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position, void *userdata)
-	{
-		PlayListContainer* pContainer = GetPlayListContainer( pc, userdata );
-		pContainer->OnPlaylistAdded( playlist, position );
-	}
+PlayListContainer *PlayListContainer::GetPlayListContainer(sp_playlistcontainer *pc, void *userdata) {
+    PlayListContainer *pContainer = reinterpret_cast<PlayListContainer *>(userdata);
+    assert(pContainer->m_pContainer == pc);
 
-	void PlayListContainer::callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position, void *userdata)
-	{		
-		PlayListContainer* pContainer = GetPlayListContainer( pc, userdata );
-		pContainer->OnPlaylistRemoved( playlist, position );
-	}
+    return pContainer;
+}
 
-	void PlayListContainer::callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position, int new_position, void *userdata)
-	{
-		PlayListContainer* pContainer = GetPlayListContainer( pc, userdata );
-		pContainer->OnPlaylistMoved( playlist, position, new_position );
-	}
+void PlayListContainer::callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position, void *userdata) {
+    PlayListContainer *pContainer = GetPlayListContainer(pc, userdata);
+    pContainer->OnPlaylistAdded(playlist, position);
+}
 
-	void PlayListContainer::callback_container_loaded(sp_playlistcontainer *pc, void *userdata)
-	{
-		PlayListContainer* pContainer = GetPlayListContainer( pc, userdata );
-		
-		pContainer->m_isLoading = false;
+void PlayListContainer::callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position, void *userdata) {
+    PlayListContainer *pContainer = GetPlayListContainer(pc, userdata);
+    pContainer->OnPlaylistRemoved(playlist, position);
+}
 
-		pContainer->OnContainerLoaded();		
-	}
+void PlayListContainer::callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position, int new_position, void *userdata) {
+    PlayListContainer *pContainer = GetPlayListContainer(pc, userdata);
+    pContainer->OnPlaylistMoved(playlist, position, new_position);
+}
 
-	void PlayListContainer::OnPlaylistAdded(sp_playlist *playlist, int position)
-	{
-		LOG("OnPlaylistAdded [0x%08X]", playlist);
-	}
+void PlayListContainer::callback_container_loaded(sp_playlistcontainer *pc, void *userdata) {
+    PlayListContainer *pContainer = GetPlayListContainer(pc, userdata);
 
-	void PlayListContainer::OnPlaylistRemoved(sp_playlist *playlist, int position)
-	{
-		LOG("OnPlaylistRemoved [0x%08X]", playlist);
-	}
+    pContainer->m_isLoading = false;
 
-	void PlayListContainer::OnPlaylistMoved(sp_playlist *playlist, int position, int newPosition)
-	{
-		LOG("OnPlaylistMoved [0x%08X]", playlist);
-	}
+    pContainer->OnContainerLoaded();
+}
 
-	void PlayListContainer::OnContainerLoaded()
-	{		
-		LOG("OnContainerLoaded");	
+void PlayListContainer::OnPlaylistAdded(sp_playlist *playlist, int position) {
+    LOG("OnPlaylistAdded [0x%08X]", playlist);
+}
 
-		int numPlaylists = sp_playlistcontainer_num_playlists( m_pContainer );
+void PlayListContainer::OnPlaylistRemoved(sp_playlist *playlist, int position) {
+    LOG("OnPlaylistRemoved [0x%08X]", playlist);
+}
 
-		boost::shared_ptr<PlayListElement> itContainer = shared_from_this();
-		
-		for (int i=0; (i<numPlaylists); i++)
-		{
-			sp_playlist_type type = sp_playlistcontainer_playlist_type( m_pContainer, i );
+void PlayListContainer::OnPlaylistMoved(sp_playlist *playlist, int position, int newPosition) {
+    LOG("OnPlaylistMoved [0x%08X]", playlist);
+}
 
-			switch ( type )
-			{
-			case SP_PLAYLIST_TYPE_PLAYLIST:
-				{
-					sp_playlist* p = sp_playlistcontainer_playlist( m_pContainer, i );
-					
-					boost::shared_ptr<PlayList> playList = m_session->CreatePlayList();
-					playList->Load( p );
+void PlayListContainer::OnContainerLoaded() {
+    LOG("OnContainerLoaded");
 
-					itContainer->AddPlayList( playList );					
-				}
-				break;
-			case SP_PLAYLIST_TYPE_START_FOLDER:
-				{										
-					boost::shared_ptr<PlayListFolder> folder = m_session->CreatePlayListFolder();
-					folder->Load( m_pContainer, i );
+    int numPlaylists = sp_playlistcontainer_num_playlists(m_pContainer);
 
-					itContainer->AddPlayList( folder );
-					itContainer = folder;
-				}
-				break;
-			case SP_PLAYLIST_TYPE_END_FOLDER:
-					itContainer = itContainer->GetParent();
-				break;
-			case SP_PLAYLIST_TYPE_PLACEHOLDER:
-			default:
-				LOG("OTHER???");
-				
-				// ??
-				break;
-			}			
-			
-		}
+    boost::shared_ptr<PlayListElement> itContainer = shared_from_this();
 
-		assert( itContainer == shared_from_this() );
+    for (int i = 0; (i < numPlaylists); i++) {
+        sp_playlist_type type = sp_playlistcontainer_playlist_type(m_pContainer, i);
 
-	}
+        switch (type) {
+            case SP_PLAYLIST_TYPE_PLAYLIST: {
+                sp_playlist *p = sp_playlistcontainer_playlist(m_pContainer, i);
+
+                boost::shared_ptr<PlayList> playList = m_session->CreatePlayList();
+                playList->Load(p);
+
+                itContainer->AddPlayList(playList);
+            }
+            break;
+
+            case SP_PLAYLIST_TYPE_START_FOLDER: {
+                boost::shared_ptr<PlayListFolder> folder = m_session->CreatePlayListFolder();
+                folder->Load(m_pContainer, i);
+
+                itContainer->AddPlayList(folder);
+                itContainer = folder;
+            }
+            break;
+
+            case SP_PLAYLIST_TYPE_END_FOLDER:
+                itContainer = itContainer->GetParent();
+                break;
+
+            case SP_PLAYLIST_TYPE_PLACEHOLDER:
+            default:
+                LOG("OTHER???");
+
+                // ??
+                break;
+        }
+
+    }
+
+    assert(itContainer == shared_from_this());
+
+}
 }
