@@ -47,7 +47,7 @@ boost::shared_ptr< Session > Session::Create() {
     return boost::shared_ptr< Session >(new Session());
 }
 
-Session::Session() : m_pSession(NULL), m_isProcessEventsRequired(false), hasLoggedOut_(NULL) {
+Session::Session() : pSession_(NULL), isProcessEventsRequired_(false), hasLoggedOut_(NULL) {
 }
 
 Session::~Session() {
@@ -126,7 +126,7 @@ void Session::Update() {
 void Session::Login(const char *username, const char *password, bool rememberMe) {
     hasLoggedOut_ = false;
 
-    sp_session_login(pSession_, username, password, rememberMe);
+    sp_session_login(pSession_, username, password, rememberMe, NULL);
 }
 
 void Session::Logout() {
@@ -134,7 +134,7 @@ void Session::Logout() {
 }
 
 bool Session::IsLoggedIn() {
-    bool isloggedIn = (NULL != m_pSession) && !hasLoggedOut_ && (GetConnectionState() == SP_CONNECTION_STATE_LOGGED_IN);
+    bool isloggedIn = (NULL != pSession_) && !hasLoggedOut_ && (GetConnectionState() == SP_CONNECTION_STATE_LOGGED_IN);
     return isloggedIn;
 }
 
@@ -154,7 +154,7 @@ sp_error Session::Load(boost::shared_ptr<Track> track) {
         }
 
         if (track) {
-            sp_error error = sp_session_player_load(m_pSession, track->pTrack_);
+            sp_error error = sp_session_player_load(pSession_, track->pTrack_);
 
             if (error == SP_ERROR_OK) {
                 track_ = track;
@@ -191,7 +191,7 @@ void Session::Stop() {
 }
 
 sp_error Session::PreFetch(boost::shared_ptr<Track> track) {
-    sp_error error = sp_session_player_prefetch(m_pSession, track->pTrack_);
+    sp_error error = sp_session_player_prefetch(pSession_, track->pTrack_);
     return error;
 }
 

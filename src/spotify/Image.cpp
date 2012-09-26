@@ -30,7 +30,7 @@ Image::~Image() {
 }
 
 bool Image::Load(const byte *image_id) {
-    m_pImage = sp_image_create(m_session->pSession_, image_id);
+    pImage_ = sp_image_create(session_->pSession_, image_id);
 
     return (pImage_ != NULL);
 }

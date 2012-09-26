@@ -26,7 +26,7 @@ AlbumBrowse::AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<A
     session_ = session;
     album_ = album;
 
-    m_pAlbumBrowse = sp_albumbrowse_create(session->m_pSession, album->pAlbum_, callback_albumbrowse_complete, this);
+    pAlbumBrowse_ = sp_albumbrowse_create(session->pSession_, album->pAlbum_, callback_albumbrowse_complete, this);
 }
 
 AlbumBrowse::~AlbumBrowse() {

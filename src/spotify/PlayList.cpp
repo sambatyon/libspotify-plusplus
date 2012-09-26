@@ -28,7 +28,7 @@
 #define LOG( msg, ... )		//Debug::PrintLine( msg, __VA_ARGS__ )
 
 namespace spotify {
-PlayList::PlayList(boost::shared_ptr<Session> session) : PlayListElement(session), m_pPlayList(NULL), isLoading_(false) {
+PlayList::PlayList(boost::shared_ptr<Session> session) : PlayListElement(session), pPlayList_(NULL), isLoading_(false) {
 }
 
 PlayList::~PlayList() {

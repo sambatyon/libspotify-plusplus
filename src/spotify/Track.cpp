@@ -109,10 +109,10 @@ int Track::GetPopularity() {
 }
 
 bool Track::IsStarred() {
-    return sp_track_is_starred(m_session->m_pSession, pTrack_);
+    return sp_track_is_starred(session_->pSession_, pTrack_);
 }
 
 void Track::SetStarred(bool isStarred) {
-    sp_track_set_starred(m_session->m_pSession, &pTrack_, 1, isStarred);
+    sp_track_set_starred(session_->pSession_, &pTrack_, 1, isStarred);
 }
 }

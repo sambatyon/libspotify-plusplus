@@ -49,7 +49,7 @@ boost::shared_ptr<Image> Album::GetImage() {
         return boost::shared_ptr<Image>();
     }
 
-    const byte *album_id = sp_album_cover(pAlbum_);
+    const byte *album_id = sp_album_cover(pAlbum_, SP_IMAGE_SIZE_LARGE);
 
     if (album_id == NULL) {
         return boost::shared_ptr<Image>();

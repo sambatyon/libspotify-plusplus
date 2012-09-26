@@ -22,7 +22,7 @@
 #include "Debug/Debug.hpp"
 
 namespace spotify {
-PlayListFolder::PlayListFolder(boost::shared_ptr<Session> session) : PlayListElement(session), m_pContainer(NULL), containerIndex_(-1) {
+PlayListFolder::PlayListFolder(boost::shared_ptr<Session> session) : PlayListElement(session), pContainer_(NULL), containerIndex_(-1) {
 }
 
 PlayListFolder::~PlayListFolder() {
@@ -71,14 +71,14 @@ void PlayListFolder::AddPlayList(boost::shared_ptr<PlayListElement> playList) {
 std::string PlayListFolder::GetName() {
     const int BUFFER_SIZE = 256;
     char buffer[BUFFER_SIZE];
-    sp_playlistcontainer_playlist_folder_name(m_pContainer, containerIndex_, buffer, BUFFER_SIZE);
+    sp_playlistcontainer_playlist_folder_name(pContainer_, containerIndex_, buffer, BUFFER_SIZE);
 
     std::string folderName = buffer;
     return folderName;
 }
 
 sp_uint64 PlayListFolder::GetGroupID() {
-    sp_uint64 groupID = sp_playlistcontainer_playlist_folder_id(m_pContainer, containerIndex_);
+    sp_uint64 groupID = sp_playlistcontainer_playlist_folder_id(pContainer_, containerIndex_);
     return groupID;
 }
 

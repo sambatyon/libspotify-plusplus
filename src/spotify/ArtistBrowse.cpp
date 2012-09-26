@@ -25,7 +25,7 @@ ArtistBrowse::ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr
     session_ = session;
     artist_ = artist;
 
-    m_pArtistBrowse = sp_artistbrowse_create(session->m_pSession, artist->pArtist_, callback_artistbrowse_complete, this);
+    pArtistBrowse_ = sp_artistbrowse_create(session->pSession_, artist->pArtist_, SP_ARTISTBROWSE_FULL, callback_artistbrowse_complete, this);
 }
 
 ArtistBrowse::~ArtistBrowse() {

@@ -20,7 +20,7 @@
 
 
 namespace spotify {
-PlayListElement::PlayListElement(boost::shared_ptr<Session> session) : m_session(session), pUserData_(NULL) {
+PlayListElement::PlayListElement(boost::shared_ptr<Session> session) : session_(session), pUserData_(NULL) {
 }
 
 PlayListElement::~PlayListElement() {

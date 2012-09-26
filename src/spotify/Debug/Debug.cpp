@@ -15,7 +15,7 @@
  *
  */
 
-#include "Debug.h"
+#include "Debug.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
