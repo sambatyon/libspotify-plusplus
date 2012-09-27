@@ -18,19 +18,20 @@
 
 #include "Debug.hpp"
 
+#include <boost/thread.hpp>
+
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "spotify/core/Mutex.hpp"
 
 namespace spotify {
 namespace debug {
 namespace {
-core::Mutex g_mutex;
+boost::mutex mutex;
 }
 
 void PrintLine(const char *msg, ...) {
-    core::ScopedLock autoLock(&g_mutex);
+    boost::lock_guard<boost::mutex> lock(mutex);
 
     va_list args;
     va_start(args, msg);
@@ -43,7 +44,7 @@ void PrintLine(const char *msg, ...) {
 }
 
 void PrintLine(int indent, const char *msg, ...) {
-    core::ScopedLock autoLock(&g_mutex);
+    boost::lock_guard<boost::mutex> lock(mutex);
 
     for (int i = 0; i < indent; i++) {
         printf(" ");
@@ -57,8 +58,6 @@ void PrintLine(int indent, const char *msg, ...) {
     va_end(args);
 
     printf("\n");
-
 }
-
 } // Debug
 } // Spotify
