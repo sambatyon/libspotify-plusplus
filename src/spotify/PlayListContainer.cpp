@@ -113,7 +113,7 @@ boost::shared_ptr<PlayListElement> PlayListContainer::GetChild(int index) {
 }
 
 void PlayListContainer::DumpToTTY(int level) {
-    Debug::PrintLine(level, "PlayListContainer");
+    debug::PrintLine(level, "PlayListContainer");
 
     level ++;
 

@@ -19,7 +19,7 @@
 #pragma once
 
 namespace spotify {
-namespace Debug {
+namespace debug {
 void PrintLine(const char *msg, ...);
 
 void PrintLine(int indent, const char *msg, ...);

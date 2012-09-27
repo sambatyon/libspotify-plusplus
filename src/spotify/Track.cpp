@@ -80,7 +80,7 @@ void Track::DumpToTTY(int level) {
     int seconds = GetDuration() / 1000;
     int mins = seconds / 60;
     seconds %= 60;
-    Debug::PrintLine(level, "Track [%s] [%d]mins [%d]secs", GetName().c_str(), mins, seconds);
+    debug::PrintLine(level, "Track [%s] [%d]mins [%d]secs", GetName().c_str(), mins, seconds);
 }
 
 int Track::GetNumArtists() {

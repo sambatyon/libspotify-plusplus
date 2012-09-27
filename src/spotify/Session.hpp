@@ -40,7 +40,7 @@ class Track;
 class AlbumBrowse;
 class ArtistBrowse;
 
-namespace Core {
+namespace core {
 // forward declaration
 class Mutex;
 }

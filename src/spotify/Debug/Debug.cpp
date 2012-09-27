@@ -24,13 +24,13 @@
 #include "spotify/Core/Mutex.hpp"
 
 namespace spotify {
-namespace Debug {
+namespace debug {
 namespace {
-Core::Mutex g_mutex;
+core::Mutex g_mutex;
 }
 
 void PrintLine(const char *msg, ...) {
-    Core::ScopedLock autoLock(&g_mutex);
+    core::ScopedLock autoLock(&g_mutex);
 
     va_list args;
     va_start(args, msg);
@@ -43,7 +43,7 @@ void PrintLine(const char *msg, ...) {
 }
 
 void PrintLine(int indent, const char *msg, ...) {
-    Core::ScopedLock autoLock(&g_mutex);
+    core::ScopedLock autoLock(&g_mutex);
 
     for (int i = 0; i < indent; i++) {
         printf(" ");

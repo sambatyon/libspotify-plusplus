@@ -96,7 +96,7 @@ boost::shared_ptr<PlayListElement> PlayListFolder::GetChild(int index) {
 }
 
 void PlayListFolder::DumpToTTY(int level) {
-    Debug::PrintLine(level, "Folder [%s]", GetName().c_str());
+    debug::PrintLine(level, "Folder [%s]", GetName().c_str());
 
     level ++;
 

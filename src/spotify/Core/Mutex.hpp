@@ -21,7 +21,7 @@
 #include <boost/thread/mutex.hpp>
 
 namespace spotify {
-namespace Core {
+namespace core {
 class Mutex {
 public:
 
