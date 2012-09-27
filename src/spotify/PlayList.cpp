@@ -24,13 +24,18 @@
 #include "spotify/Session.hpp"
 #include "spotify/Track.hpp"
 
-// Debugging
-#include "spotify/debug/Debug.hpp"
-#define LOG( msg, ... ) //Debug::PrintLine( msg, __VA_ARGS__ )
+#include <boost/format.hpp>
 
 #include <cstdlib>
 
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/logger.h>
+
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.PlayList");
+}
+
 PlayList::PlayList(boost::shared_ptr<Session> session) : PlayListElement(session), playlist_(NULL)
                                                        , is_loading_(false) {
 }
@@ -136,9 +141,12 @@ boost::shared_ptr<PlayListElement> PlayList::GetChild(int index) {
 }
 
 void PlayList::DumpToTTY(int level) {
-    debug::PrintLine(level, "PlayList [%s]", GetName().c_str());
+    std::string indent = "";
+    for (int i = 0; i < level; ++i)
+        indent += " ";
+    LOG4CPLUS_DEBUG(logger, (boost::format("%sPlaylist [%s]") % indent % GetName()));
 
-    level++;
+    ++level;
 
     int num_tracks = GetNumTracks();
 
@@ -228,54 +236,57 @@ void PlayList::callback_image_changed(sp_playlist *pl, const byte *image, void *
 }
 
 void PlayList::OnTracksAdded(sp_track *const *tracks, int num_tracks, int position) {
-    LOG("PlayList::OnTracksAdded [0x%08X] num_tracks[%d] position[%d]", this, num_tracks, position);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnTracksAdded [0x%08X] num_tracks[%d] position[%d]") 
+                                           % this % num_tracks % position));
 }
 
 void PlayList::OnTracksRemoved(const int *tracks, int num_tracks) {
-    LOG("PlayList::OnTracksRemoved [0x%08X] num_tracks[%d]", this, num_tracks);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnTracksRemoved [0x%08X] num_tracks[%d]") % this % num_tracks));
 }
 
 void PlayList::OnTracksMoved(const int *tracks, int num_tracks, int new_position) {
-    LOG("PlayList::OnTracksMoved [0x%08X] num_tracks[%d] new_position[%d]", this, num_tracks, new_position);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnTracksMoved [0x%08X] num_tracks[%d] new_position[%d]") 
+                                           % this % num_tracks % new_position));
 }
 
 void PlayList::OnPlaylistRenamed() {
-    LOG("PlayList::OnPlaylistRenamed [0x%08X]", this);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnPlaylistRenamed [0x%08X]") % this));
 }
 
 void PlayList::OnPlaylistStateChanged() {
     bool loaded = sp_playlist_is_loaded(playlist_);
 
-    LOG("PlayList::OnPlaylistStateChanged [0x%08X] m_isLoading [%d] isLoaded [%d]", this, isLoading_, isLoaded);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnPlaylistStateChanged [0x%08X] m_isLoading [%d] isLoaded [%d]") 
+                                           % this % is_loading_ % loaded));
 
     if (is_loading_ && loaded) {
         is_loading_ = false;
-
         LoadTracks();
     }
 }
 
 void PlayList::OnPlaylistUpdateInProgress(bool done) {
-    LOG("PlayList::OnPlaylistUpdateInProgress [0x%08X] - done [%d]", this, done);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnPlaylistUpdateInProgress [0x%08X] - done [%d]") 
+                                           % this % done));
 }
 
 void PlayList::OnPlaylistMetadataUpdated() {
-    LOG("PlayList::OnPlaylistMetadataUpdated [0x%08X]", this);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnPlaylistMetadataUpdated [0x%08X]") % this));
 }
 
 void PlayList::OnTrackCreatedChanged(int position, sp_user *user, int when) {
-    LOG("PlayList::OnTrackCreatedChanged [0x%08X]", this);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnTrackCreatedChanged [0x%08X]") % this));
 }
 
 void PlayList::OnTrackSeenChanged(int position, bool seen) {
-    LOG("PlayList::OnTrackSeenChanged [0x%08X]", this);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnTrackSeenChanged [0x%08X]") % this));
 }
 
 void PlayList::OnDescriptionChanged(const char *desc) {
-    LOG("PlayList::OnDescriptionChanged [0x%08X]", this);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnDescriptionChanged [0x%08X]") % this));
 }
 
 void PlayList::OnImageChanged(const byte *image) {
-    LOG("PlayList::OnImageChanged [0x%08X]", this);
+    LOG4CPLUS_DEBUG(logger, (boost::format("PlayList::OnImageChanged [0x%08X]") % this));
 }
 } // Spotify

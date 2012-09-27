@@ -20,7 +20,13 @@
 #include "spotify/Image.hpp"
 #include "spotify/Session.hpp"
 
+#include <log4cplus/logger.h>
+
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.Image");
+}
+
 Image::Image(boost::shared_ptr<Session> session) : image_(NULL), session_(session) {
 }
 

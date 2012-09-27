@@ -24,13 +24,18 @@
 #include "spotify/PlayListFolder.hpp"
 #include "spotify/Session.hpp"
 
-// debugging
-#include "debug/Debug.hpp"
-#define LOG( msg, ... ) //Debug::PrintLine( msg, __VA_ARGS__ );
+#include <boost/format.hpp>
 
 #include <cstdlib>
 
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/logger.h>
+
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.PlayListContainer");
+}
+
 PlayListContainer::PlayListContainer(boost::shared_ptr<Session> session) : PlayListElement(session), container_(NULL)
                                                                          , loading_(false), playlists_() {
 }
@@ -106,9 +111,12 @@ boost::shared_ptr<PlayListElement> PlayListContainer::GetChild(int index) {
 }
 
 void PlayListContainer::DumpToTTY(int level) {
-    debug::PrintLine(level, "PlayListContainer");
+    std::string indent = "";
+    for (int i = 0; i < level; ++i)
+        indent += " ";
+    LOG4CPLUS_DEBUG(logger, (boost::format("%sPlayListContainer") % indent));
 
-    level++;
+    ++level;
 
     int numPlayLists = GetNumChildren();
 
@@ -152,19 +160,19 @@ void PlayListContainer::callback_container_loaded(sp_playlistcontainer *pc, void
 }
 
 void PlayListContainer::OnPlaylistAdded(sp_playlist *playlist, int position) {
-    LOG("OnPlaylistAdded [0x%08X]", playlist);
+    LOG4CPLUS_DEBUG(logger, (boost::format("OnPlaylistAdded [0x%08X]") % playlist));
 }
 
 void PlayListContainer::OnPlaylistRemoved(sp_playlist *playlist, int position) {
-    LOG("OnPlaylistRemoved [0x%08X]", playlist);
+    LOG4CPLUS_DEBUG(logger, (boost::format("OnPlaylistRemoved [0x%08X]") % playlist));
 }
 
 void PlayListContainer::OnPlaylistMoved(sp_playlist *playlist, int position, int new_position) {
-    LOG("OnPlaylistMoved [0x%08X]", playlist);
+    LOG4CPLUS_DEBUG(logger, (boost::format("OnPlaylistMoved [0x%08X]") % playlist));
 }
 
 void PlayListContainer::OnContainerLoaded() {
-    LOG("OnContainerLoaded");
+    LOG4CPLUS_DEBUG(logger, "OnContainerLoaded");
 
     int num_playlists = sp_playlistcontainer_num_playlists(container_);
 
@@ -194,11 +202,9 @@ void PlayListContainer::OnContainerLoaded() {
                 break;
             case SP_PLAYLIST_TYPE_PLACEHOLDER:
             default:
-                LOG("OTHER???");
-                // ??
+                LOG4CPLUS_WARN(logger, "Unrecognized playlist type");
                 break;
         }
-
     }
 
     BOOST_ASSERT(it_container == shared_from_this());

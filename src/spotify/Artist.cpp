@@ -19,7 +19,13 @@
 // local includes
 #include "spotify/Artist.hpp"
 
+#include <log4cplus/logger.h>
+
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.Artist");
+}
+
 Artist::Artist(boost::shared_ptr<Session> session) : artist_(NULL), session_(session) {
 }
 

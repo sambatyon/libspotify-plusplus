@@ -28,11 +28,16 @@
 #include "spotify/PlayListFolder.hpp"
 #include "spotify/Track.hpp"
 
-// debugging
-#include "debug/Debug.hpp"
-#define LOG( msg, ... ) //Debug::PrintLine( msg, __VA_ARGS__ );
+#include <boost/format.hpp>
+
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/logger.h>
 
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.Session");
+}
+
 Session::Config::Config() {
     app_key = NULL;
     app_key_size = 0;
@@ -116,7 +121,6 @@ void Session::Shutdown() {
 void Session::Update() {
     if (session_) {
         is_process_events_required_ = false;
-
         int nextTimeout = 0;
         sp_session_process_events(session_, &nextTimeout);
     }
@@ -124,7 +128,6 @@ void Session::Update() {
 
 void Session::Login(const char *username, const char *password, bool rememberMe) {
     has_logged_out_ = false;
-
     sp_session_login(session_, username, password, rememberMe, NULL);
 }
 
@@ -153,7 +156,6 @@ sp_error Session::Load(boost::shared_ptr<Track> track) {
 
         if (track) {
             sp_error error = sp_session_player_load(session_, track->track_);
-
             if (error == SP_ERROR_OK)
                 track_ = track;
             return error;
@@ -341,67 +343,68 @@ void SP_CALLCONV Session::callback_get_audio_buffer_stats(sp_session *session, s
 }
 
 void Session::OnLoggedIn(sp_error error) {
-    LOG("Session::OnLoggedIn");
+    LOG4CPLUS_TRACE(logger, "Session::OnLoggedIn");
 }
 
 void Session::OnLoggedOut() {
-    LOG("Session::OnLoggedOut");
+    LOG4CPLUS_TRACE(logger, "Session::OnLoggedOut");
 }
 
 void Session::OnMetadataUpdated() {
-    LOG("Session::OnMetadataUpdated");
+    LOG4CPLUS_TRACE(logger, "Session::OnMetadataUpdated");
 }
 
 void Session::OnConnectionError(sp_error error) {
-    LOG("Session::OnConnectionError");
+    LOG4CPLUS_TRACE(logger, "Session::OnConnectionError");
 }
 
 void Session::OnMessageToUser(const char *message) {
-    LOG("Session::OnMessageToUser");
-    LOG(message);
+    LOG4CPLUS_TRACE(logger, "Session::OnMessageToUser");
+    LOG4CPLUS_INFO(logger, message);
 }
 
 void Session::OnNotifyMainThread() {
-    LOG("Session::OnNotifyMainThread");
+    LOG4CPLUS_TRACE(logger, "Session::OnNotifyMainThread");
 }
 
 int  Session::OnMusicDelivery(const sp_audioformat *format, const void *frames, int num_frames) {
-    LOG("Session::OnMusicDelivery [%d]", ((int *)frames)[0]);
+    LOG4CPLUS_TRACE(logger, (boost::format("Session::OnMusicDelivery [%d]") 
+                                           % (reinterpret_cast<const int*>(frames))[0]));
 
     // pretend that we have consumed all of the audio frames
     return num_frames;
 }
 
 void Session::OnPlayTokenLost() {
-    LOG("Session::OnPlayTokenLost");
+    LOG4CPLUS_TRACE(logger, "Session::OnPlayTokenLost");
 }
 
 void Session::OnLogMessage(const char *data) {
-    LOG("Session::OnLogMessage");
-    LOG(data);
+    LOG4CPLUS_TRACE(logger, "Session::OnLogMessage");
+    LOG4CPLUS_TRACE(logger, data);
 }
 
 void Session::OnEndOfTrack() {
-    LOG("Session::OnEndOfTrack");
+    LOG4CPLUS_TRACE(logger, "Session::OnEndOfTrack");
 }
 
 void Session::OnStreamingError(sp_error error) {
-    LOG("Session::OnStreamingError");
+    LOG4CPLUS_ERROR(logger, "Session::OnStreamingError");
 }
 
 void Session::OnUserinfoUpdated() {
-    LOG("Session::OnUserinfoUpdated");
+    LOG4CPLUS_TRACE(logger, "Session::OnUserinfoUpdated");
 }
 
 void Session::OnStartPlayback() {
-    LOG("Session::OnStartPlayback");
+    LOG4CPLUS_TRACE(logger, "Session::OnStartPlayback");
 }
 
 void Session::OnStopPlayback() {
-    LOG("Session::OnStopPlayback");
+    LOG4CPLUS_TRACE(logger, "Session::OnStopPlayback");
 }
 
 void Session::OnGetAudioBufferStats(sp_audio_buffer_stats *stats) {
-    LOG("Session::OnGetAudioBufferStats");
+    LOG4CPLUS_TRACE(logger, "Session::OnGetAudioBufferStats");
 }
 }

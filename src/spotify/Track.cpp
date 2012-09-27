@@ -17,13 +17,18 @@
  */
 
 // lib includes
-#include "spotify/Track.hpp"
 #include "spotify/Session.hpp"
+#include "spotify/Track.hpp"
 
-// Local includes
-#include "debug/Debug.hpp"
+#include <boost/format.hpp>
+
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/logger.h>
 
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.Track");
+}
 
 Track::Track(boost::shared_ptr<Session> session) : PlayListElement(session), track_(NULL) {
 }
@@ -80,7 +85,12 @@ void Track::DumpToTTY(int level) {
     int seconds = GetDuration() / 1000;
     int mins = seconds / 60;
     seconds %= 60;
-    debug::PrintLine(level, "Track [%s] [%d]mins [%d]secs", GetName().c_str(), mins, seconds);
+    std::string indent = "";
+    for (int i = 0; i < level; ++i)
+        indent += " ";
+    LOG4CPLUS_DEBUG(logger, (boost::format("Track [%s] [%d]mins [%d]secs") % GetName() % mins % seconds));
+
+    ++level;
 }
 
 int Track::GetNumArtists() {

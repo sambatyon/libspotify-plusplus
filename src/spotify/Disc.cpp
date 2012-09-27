@@ -19,6 +19,11 @@
 // local includes
 #include "spotify/Disc.hpp"
 
+#include <log4cplus/logger.h>
+
 /// @todo implement this
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.Disc");
+}
 }

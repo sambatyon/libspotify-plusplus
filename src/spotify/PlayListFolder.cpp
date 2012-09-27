@@ -19,10 +19,17 @@
 // Lib Includes
 #include "spotify/PlayListFolder.hpp"
 
-// Local Includes
-#include "debug/Debug.hpp"
+#include <boost/format.hpp>
+
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/logger.h>
+
 
 namespace spotify {
+namespace {
+log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.PlayListFolder");
+}
+
 PlayListFolder::PlayListFolder(boost::shared_ptr<Session> session) : PlayListElement(session), playlists_()
                                                                    , container_(NULL), container_index_(-1) {
 }
@@ -95,9 +102,12 @@ boost::shared_ptr<PlayListElement> PlayListFolder::GetChild(int index) {
 }
 
 void PlayListFolder::DumpToTTY(int level) {
-    debug::PrintLine(level, "Folder [%s]", GetName().c_str());
+    std::string indent = "";
+    for (int i = 0; i < level; ++i)
+        indent += " ";
+    LOG4CPLUS_DEBUG(logger, (boost::format("Folder [%s]") % GetName()));
 
-    level++;
+    ++level;
 
     int numPlayLists = GetNumChildren();
 
