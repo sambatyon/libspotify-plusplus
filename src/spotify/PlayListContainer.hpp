@@ -18,39 +18,36 @@
 
 #pragma once
 
+// local includes
 #include "spotify/LibConfig.hpp"
+#include "spotify/Playlist.hpp"
+
+// boost includes
+#include <boost/shared_ptr.hpp>
 
 // std includes
 #include <vector>
 #include <string>
 
 // libspotify include
-#include "libspotify/api.h"
-
-// local includes
-#include "spotify/Playlist.hpp"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
+#include <libspotify/api.h>
 
 namespace spotify {
 // forward declaration
 class Session;
 
 class LIBSPOTIFYPP_API PlayListContainer : public PlayListElement {
-public:
-
+  public:
     PlayListContainer(boost::shared_ptr<Session> session);
     virtual ~PlayListContainer();
 
-    virtual eType GetType();
+    virtual PlayListType GetType();
 
     virtual bool Load(sp_playlistcontainer *container);
     virtual void Unload();
-
     virtual bool IsLoading(bool recursive);
 
-    virtual void AddPlayList(boost::shared_ptr<PlayListElement> playList);
+    virtual void AddPlayList(boost::shared_ptr<PlayListElement> playlist);
 
     virtual bool HasChildren();
     virtual int GetNumChildren();
@@ -60,30 +57,29 @@ public:
 
     virtual void DumpToTTY(int level = 0);
 
-protected:
-
+  protected:
     virtual void OnPlaylistAdded(sp_playlist *playlist, int position);
     virtual void OnPlaylistRemoved(sp_playlist *playlist, int position);
-    virtual void OnPlaylistMoved(sp_playlist *playlist, int position, int newPosition);
+    virtual void OnPlaylistMoved(sp_playlist *playlist, int position, int new_position);
     virtual void OnContainerLoaded();
 
-private:
+  private:
     friend class Session;
 
-    static void SP_CALLCONV callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position, void *userdata);
-    static void SP_CALLCONV callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position, void *userdata);
-    static void SP_CALLCONV callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position, int new_position, void *userdata);
+    static void SP_CALLCONV callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+                                                    void *userdata);
+    static void SP_CALLCONV callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+                                                      void *userdata);
+    static void SP_CALLCONV callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+                                                    int new_position, void *userdata);
     static void SP_CALLCONV callback_container_loaded(sp_playlistcontainer *pc, void *userdata);
 
     static void GetCallbacks(sp_playlistcontainer_callbacks &callbacks);
     static PlayListContainer *GetPlayListContainer(sp_playlistcontainer *pc, void *userdata);
 
-
-    sp_playlistcontainer *pContainer_;
-
-    bool isLoading_;
-
-    typedef std::vector< boost::shared_ptr<PlayListElement> > PlayListStore;
-    PlayListStore playLists_;
+    sp_playlistcontainer *container_;
+    bool loading_;
+    typedef std::vector<boost::shared_ptr<PlayListElement>> PlayListStore;
+    PlayListStore playlists_;
 };
 }

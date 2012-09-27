@@ -20,11 +20,11 @@
 
 #include "spotify/LibConfig.hpp"
 
-// std includes
-#include <vector>
-
 // boost includes
 #include <boost/shared_ptr.hpp>
+
+// std includes
+#include <vector>
 
 namespace spotify {
 // forward declaration
@@ -35,20 +35,16 @@ class Album;
 /// @brief A collection of tracks making up a disc of an album
 /// @brief (where an album could have multiple discs)
 class LIBSPOTIFYPP_API Disc {
-public:
+  public:
     int GetNumTracks();
 
     boost::shared_ptr<Track> GetTrack(int index);
-
     boost::shared_ptr<Album> GetAlbum();
-
     int GetDiscIndex();
 
-private:
-
+  private:
     /// @todo be careful that Disc and Album don't have shared_ptr's pointing at each other..  weak_ref?
     boost::shared_ptr<Album> album_;
-
-    std::vector< boost::shared_ptr<Track> > tracks_;
+    std::vector<boost::shared_ptr<Track>> tracks_;
 };
 }

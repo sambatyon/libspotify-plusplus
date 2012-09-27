@@ -20,36 +20,30 @@
 
 #include "spotify/LibConfig.hpp"
 
-// libspotify includes
-#include "libspotify/api.h"
-
 // boost includes
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+
+// libspotify includes
+#include <libspotify/api.h>
 
 namespace spotify {
 // forward declaration
 class Session;
 
 class LIBSPOTIFYPP_API Image : public boost::enable_shared_from_this<Image> {
-public:
-
+  public:
     Image(boost::shared_ptr<Session> session);
     virtual ~Image();
 
     virtual bool Load(const byte *image_id);
     virtual void Unload();
-
     virtual bool IsLoading();
 
-    virtual const void *GetData(size_t &dataSize);
+    virtual const void *GetData(std::size_t &dataSize);
 
-protected:
-
-    sp_image *pImage_;
-
+  protected:
+    sp_image *image_;
     boost::shared_ptr<Session> session_;
 };
-
-
 }

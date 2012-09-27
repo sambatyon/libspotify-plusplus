@@ -34,21 +34,21 @@
 
 namespace spotify {
 Session::Config::Config() {
-    appKey_ = NULL;
-    appKeySize_ = 0;
-    cacheLocation_ = "";
-    settingsLocation_ = "";
-    userAgent_ = "";
-    compressPlaylists_ = true;
-    dontSaveMetadataForPlaylists_ = false;
-    initiallyUnloadPlaylists_ = false;
+    app_key = NULL;
+    app_key_size = 0;
+    cache_location = "";
+    settings_ocation = "";
+    user_agent = "";
+    compress_playlists = true;
+    dont_saveMetadata_for_playlists = false;
+    initially_unload_playlists = false;
 }
 
 boost::shared_ptr< Session > Session::Create() {
     return boost::shared_ptr< Session >(new Session());
 }
 
-Session::Session() : pSession_(NULL), isProcessEventsRequired_(false), hasLoggedOut_(NULL) {
+Session::Session() : session_(NULL), is_process_events_required_(false), has_logged_out_(NULL) {
 }
 
 Session::~Session() {
@@ -56,20 +56,19 @@ Session::~Session() {
 }
 
 sp_error Session::Initialise(Config &config) {
-    sp_session_config spConfig;
+    sp_session_config sp_config;
 
-    spConfig.api_version = SPOTIFY_API_VERSION;
+    sp_config.api_version = SPOTIFY_API_VERSION;
 
     // app specified configuration
-    spConfig.application_key = config.appKey_;
-    spConfig.application_key_size = config.appKeySize_;
-    spConfig.cache_location = config.cacheLocation_;
-    spConfig.settings_location = config.settingsLocation_;
-    spConfig.user_agent = config.userAgent_;
+    sp_config.application_key = config.app_key;
+    sp_config.application_key_size = config.app_key_size;
+    sp_config.cache_location = config.cache_location;
+    sp_config.settings_location = config.settings_ocation;
+    sp_config.user_agent = config.user_agent;
 
     // locally specified configuration
-    sp_session_callbacks callbacks;
-    memset(&callbacks, 0, sizeof(callbacks));
+    sp_session_callbacks callbacks = {0};
 
     callbacks.connection_error = callback_connection_error;
     callbacks.end_of_track = callback_end_of_track;
@@ -87,64 +86,62 @@ sp_error Session::Initialise(Config &config) {
     callbacks.streaming_error = callback_streaming_error;
     callbacks.userinfo_updated = callback_userinfo_updated;
 
-    spConfig.callbacks = &callbacks;
-    spConfig.userdata = this;
+    sp_config.callbacks = &callbacks;
+    sp_config.userdata = this;
 
-    spConfig.compress_playlists = config.compressPlaylists_;
-    spConfig.dont_save_metadata_for_playlists = config.dontSaveMetadataForPlaylists_;
-    spConfig.initially_unload_playlists = config.initiallyUnloadPlaylists_;
+    sp_config.compress_playlists = config.compress_playlists;
+    sp_config.dont_save_metadata_for_playlists = config.dont_saveMetadata_for_playlists;
+    sp_config.initially_unload_playlists = config.initially_unload_playlists;
 
-    sp_error error = sp_session_create(&spConfig, &pSession_);
+    sp_error error = sp_session_create(&sp_config, &session_);
 
     return error;
 }
 
 void Session::Shutdown() {
-    if (pSession_) {
-        if (track_) {
+    if (session_) {
+        if (track_)
             Unload(track_);
-        }
 
         // clear any remaining events
         Update();
 
         // release the session
-        sp_session_release(pSession_);
+        sp_session_release(session_);
 
-        pSession_ = NULL;
+        session_ = NULL;
     }
 }
 
 void Session::Update() {
-    if (pSession_) {
-        isProcessEventsRequired_ = false;
+    if (session_) {
+        is_process_events_required_ = false;
 
         int nextTimeout = 0;
-        sp_session_process_events(pSession_, &nextTimeout);
+        sp_session_process_events(session_, &nextTimeout);
     }
 }
 
 void Session::Login(const char *username, const char *password, bool rememberMe) {
-    hasLoggedOut_ = false;
+    has_logged_out_ = false;
 
-    sp_session_login(pSession_, username, password, rememberMe, NULL);
+    sp_session_login(session_, username, password, rememberMe, NULL);
 }
 
 void Session::Logout() {
-    sp_session_logout(pSession_);
+    sp_session_logout(session_);
 }
 
 bool Session::IsLoggedIn() {
-    bool isloggedIn = (NULL != pSession_) && !hasLoggedOut_ && (GetConnectionState() == SP_CONNECTION_STATE_LOGGED_IN);
-    return isloggedIn;
+    bool is_logged_in = session_ && !has_logged_out_ && (GetConnectionState() == SP_CONNECTION_STATE_LOGGED_IN);
+    return is_logged_in;
 }
 
 sp_connectionstate Session::GetConnectionState() {
-    if (pSession_) {
-        return sp_session_connectionstate(pSession_);
-    } else {
+    if (session_)
+        return sp_session_connectionstate(session_);
+    else
         return SP_CONNECTION_STATE_LOGGED_OUT;
-    }
 }
 
 sp_error Session::Load(boost::shared_ptr<Track> track) {
@@ -155,12 +152,10 @@ sp_error Session::Load(boost::shared_ptr<Track> track) {
         }
 
         if (track) {
-            sp_error error = sp_session_player_load(pSession_, track->pTrack_);
+            sp_error error = sp_session_player_load(session_, track->track_);
 
-            if (error == SP_ERROR_OK) {
+            if (error == SP_ERROR_OK)
                 track_ = track;
-            }
-
             return error;
         }
     }
@@ -170,7 +165,7 @@ sp_error Session::Load(boost::shared_ptr<Track> track) {
 
 void Session::Unload(boost::shared_ptr<Track> track) {
     if (track && (track == track_)) {
-        sp_session_player_unload(pSession_);
+        sp_session_player_unload(session_);
         track_.reset();
     }
 }
@@ -180,58 +175,54 @@ boost::shared_ptr<Track> Session::GetCurrentTrack() {
 }
 
 void Session::Seek(int offset) {
-    sp_session_player_seek(pSession_, offset);
+    sp_session_player_seek(session_, offset);
 }
 
 void Session::Play() {
-    sp_session_player_play(pSession_, true);
+    sp_session_player_play(session_, true);
 }
 
 void Session::Stop() {
-    sp_session_player_play(pSession_, false);
+    sp_session_player_play(session_, false);
 }
 
 sp_error Session::PreFetch(boost::shared_ptr<Track> track) {
-    sp_error error = sp_session_player_prefetch(pSession_, track->pTrack_);
+    sp_error error = sp_session_player_prefetch(session_, track->track_);
     return error;
 }
 
 boost::shared_ptr<PlayListContainer> Session::GetPlayListContainer() {
-    sp_playlistcontainer *c = sp_session_playlistcontainer(pSession_);
+    sp_playlistcontainer *c = sp_session_playlistcontainer(session_);
 
-    if (NULL == c) {
+    if (!c)
         return boost::shared_ptr<PlayListContainer>();
-    }
 
     boost::shared_ptr<PlayListContainer> container = CreatePlayListContainer();
-    bool isLoading = container->Load(c);
+    bool loading = container->Load(c);
 
-    if (!isLoading) {
+    if (!loading)
         container.reset();
-    }
 
     return container;
 }
 
 boost::shared_ptr<PlayList> Session::GetStarredPlayList() {
-    sp_playlist *p = sp_session_starred_create(pSession_);
+    sp_playlist *p = sp_session_starred_create(session_);
 
-    if (NULL == p) {
+    if (!p)
         return boost::shared_ptr<PlayList>();
-    }
 
     boost::shared_ptr<PlayList> playList = CreatePlayList();
-    bool isLoading = playList->Load(p);
+    bool loading = playList->Load(p);
 
-    if (!isLoading) {
+    if (!loading)
         playList.reset();
-    }
 
     return playList;
 }
 
 void Session::SetPreferredBitrate(sp_bitrate bitrate) {
-    sp_session_preferred_bitrate(pSession_, bitrate);
+    sp_session_preferred_bitrate(session_, bitrate);
 }
 
 boost::shared_ptr<PlayList> Session::CreatePlayList() {
@@ -264,90 +255,89 @@ boost::shared_ptr<Image> Session::CreateImage() {
 
 namespace {
 static Session *GetSessionFromUserdata(sp_session *session) {
-    Session *pSession = reinterpret_cast<Session *>(sp_session_userdata(session));
-    return pSession;
+    Session *sess = reinterpret_cast<Session *>(sp_session_userdata(session));
+    return sess;
 }
 }
 
 void SP_CALLCONV Session::callback_logged_in(sp_session *session, sp_error error) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnLoggedIn(error);
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnLoggedIn(error);
 }
 
 void SP_CALLCONV Session::callback_logged_out(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
+    Session *sess = GetSessionFromUserdata(session);
 
-    pSession->hasLoggedOut_ = true;
+    sess->has_logged_out_ = true;
 
-    pSession->OnLoggedOut();
+    sess->OnLoggedOut();
 }
 
 void SP_CALLCONV Session::callback_metadata_updated(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnMetadataUpdated();
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnMetadataUpdated();
 }
 
 void SP_CALLCONV Session::callback_connection_error(sp_session *session, sp_error error) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnConnectionError(error);
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnConnectionError(error);
 }
 
 void SP_CALLCONV Session::callback_message_to_user(sp_session *session, const char *message) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnMessageToUser(message);
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnMessageToUser(message);
 }
 
 void SP_CALLCONV Session::callback_notify_main_thread(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
-
-    pSession->OnNotifyMainThread();
-
-    pSession->isProcessEventsRequired_ = true;
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnNotifyMainThread();
+    sess->is_process_events_required_ = true;
 }
 
-int  SP_CALLCONV Session::callback_music_delivery(sp_session *session, const sp_audioformat *format, const void *frames, int num_frames) {
-    Session *pSession = GetSessionFromUserdata(session);
-    return pSession->OnMusicDelivery(format, frames, num_frames);
+int  SP_CALLCONV Session::callback_music_delivery(sp_session *session, const sp_audioformat *format, 
+                                                  const void *frames, int num_frames) {
+    Session *sess = GetSessionFromUserdata(session);
+    return sess->OnMusicDelivery(format, frames, num_frames);
 }
 
 void SP_CALLCONV Session::callback_play_token_lost(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnPlayTokenLost();
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnPlayTokenLost();
 }
 
 void SP_CALLCONV Session::callback_log_message(sp_session *session, const char *data) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnLogMessage(data);
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnLogMessage(data);
 }
 
 void SP_CALLCONV Session::callback_end_of_track(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnEndOfTrack();
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnEndOfTrack();
 }
 
 void SP_CALLCONV Session::callback_streaming_error(sp_session *session, sp_error error) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnStreamingError(error);
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnStreamingError(error);
 }
 
 void SP_CALLCONV Session::callback_userinfo_updated(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnUserinfoUpdated();
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnUserinfoUpdated();
 }
 
 void SP_CALLCONV Session::callback_start_playback(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnStartPlayback();
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnStartPlayback();
 }
 
 void SP_CALLCONV Session::callback_stop_playback(sp_session *session) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnStopPlayback();
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnStopPlayback();
 }
 
 void SP_CALLCONV Session::callback_get_audio_buffer_stats(sp_session *session, sp_audio_buffer_stats *stats) {
-    Session *pSession = GetSessionFromUserdata(session);
-    pSession->OnGetAudioBufferStats(stats);
+    Session *sess = GetSessionFromUserdata(session);
+    sess->OnGetAudioBufferStats(stats);
 }
 
 void Session::OnLoggedIn(sp_error error) {
@@ -414,5 +404,4 @@ void Session::OnStopPlayback() {
 void Session::OnGetAudioBufferStats(sp_audio_buffer_stats *stats) {
     LOG("Session::OnGetAudioBufferStats");
 }
-
 }

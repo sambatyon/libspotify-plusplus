@@ -22,94 +22,92 @@
 #include "spotify/Artist.hpp"
 
 namespace spotify {
-ArtistBrowse::ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Artist> artist) {
-    session_ = session;
-    artist_ = artist;
-
-    pArtistBrowse_ = sp_artistbrowse_create(session->pSession_, artist->pArtist_, SP_ARTISTBROWSE_FULL, callback_artistbrowse_complete, this);
+ArtistBrowse::ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Artist> artist) 
+    : session_(session) , artist_(artist) , artist_browse_(NULL) {
+    artist_browse_ = sp_artistbrowse_create(session->session_, artist->artist_, SP_ARTISTBROWSE_FULL, callback_artistbrowse_complete, this);
 }
 
 ArtistBrowse::~ArtistBrowse() {
-    sp_artistbrowse_release(pArtistBrowse_);
+    sp_artistbrowse_release(artist_browse_);
 }
 
 bool ArtistBrowse::IsLoading() {
-    return !sp_artistbrowse_is_loaded(pArtistBrowse_);
+    return !sp_artistbrowse_is_loaded(artist_browse_);
 }
 
 boost::shared_ptr<Artist> ArtistBrowse::GetArtist() {
-    sp_artist *pArtist = sp_artistbrowse_artist(pArtistBrowse_);
+    sp_artist *sp_artist = sp_artistbrowse_artist(artist_browse_);
 
     boost::shared_ptr<Artist> artist = session_->CreateArtist();
-    artist->Load(pArtist);
+    artist->Load(sp_artist);
 
     return artist;
 }
 
 int ArtistBrowse::GetNumPortraits() {
-    return sp_artistbrowse_num_portraits(pArtistBrowse_);
+    return sp_artistbrowse_num_portraits(artist_browse_);
 }
 
 boost::shared_ptr<Image> ArtistBrowse::GetPortrait(int index) {
     boost::shared_ptr<Image> image = session_->CreateImage();
 
-    image->Load(sp_artistbrowse_portrait(pArtistBrowse_, index));
+    image->Load(sp_artistbrowse_portrait(artist_browse_, index));
 
     return image;
 }
 
 int ArtistBrowse::GetNumTracks() {
-    return sp_artistbrowse_num_tracks(pArtistBrowse_);
+    return sp_artistbrowse_num_tracks(artist_browse_);
 }
 
 boost::shared_ptr<Track> ArtistBrowse::GetTrack(int index) {
     boost::shared_ptr<Track> track = session_->CreateTrack();
 
-    sp_track *pTrack = sp_artistbrowse_track(pArtistBrowse_, index);
+    sp_track *sp_track = sp_artistbrowse_track(artist_browse_, index);
 
-    track->Load(pTrack);
+    track->Load(sp_track);
 
     return track;
 }
 
 int ArtistBrowse::GetNumAlbums() {
-    return sp_artistbrowse_num_albums(pArtistBrowse_);
+    return sp_artistbrowse_num_albums(artist_browse_);
 }
 
 boost::shared_ptr<Album> ArtistBrowse::GetAlbum(int index) {
     boost::shared_ptr<Album> album = session_->CreateAlbum();
 
-    sp_album *pAlbum = sp_artistbrowse_album(pArtistBrowse_, index);
+    sp_album *sp_album = sp_artistbrowse_album(artist_browse_, index);
 
-    album->Load(pAlbum);
+    album->Load(sp_album);
 
     return album;
 }
 
 int ArtistBrowse::GetNumSimilarArtists() {
-    return sp_artistbrowse_num_similar_artists(pArtistBrowse_);
+    return sp_artistbrowse_num_similar_artists(artist_browse_);
 }
 
 boost::shared_ptr<Artist> ArtistBrowse::GetSimilarArtist(int index) {
     boost::shared_ptr<Artist> artist = session_->CreateArtist();
 
-    sp_artist *pArtist = sp_artistbrowse_similar_artist(pArtistBrowse_, index);
-    artist->Load(pArtist);
+    sp_artist *sp_rtist = sp_artistbrowse_similar_artist(artist_browse_, index);
+    artist->Load(sp_rtist);
 
     return artist;
 }
 
 std::string ArtistBrowse::GetBiography() {
-    std::string biography = sp_artistbrowse_biography(pArtistBrowse_);
+    std::string biography = sp_artistbrowse_biography(artist_browse_);
 
     return biography;
 }
 
 void SP_CALLCONV ArtistBrowse::callback_artistbrowse_complete(sp_artistbrowse *result, void *userdata) {
-    ArtistBrowse *pArtistBrowse = reinterpret_cast<ArtistBrowse *>(userdata);
+    ArtistBrowse *artist_browse = reinterpret_cast<ArtistBrowse *>(userdata);
 
-    BOOST_ASSERT(pArtistBrowse->pArtistBrowse_ == result);
+    BOOST_ASSERT(artist_browse->artist_browse_ == result);
 
-    pArtistBrowse->OnComplete();
+    artist_browse->OnComplete();
 }
 }

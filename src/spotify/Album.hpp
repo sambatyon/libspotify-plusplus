@@ -22,15 +22,15 @@
 #include "spotify/LibConfig.hpp"
 #include "spotify/AlbumBrowse.hpp"
 
+// boost includes
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
 // std include
 #include <string>
 
 // libspotify include
-#include "libspotify/api.h"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
+#include <libspotify/api.h>
 
 namespace spotify {
 // forward declarations
@@ -39,28 +39,23 @@ class Session;
 class Artist;
 
 class LIBSPOTIFYPP_API Album : public boost::enable_shared_from_this<Album> {
-public:
+  public:
 
     Album(boost::shared_ptr<Session> session);
     virtual ~Album();
 
     virtual void Load(sp_album *pAlbum);
-
     virtual bool IsLoading();
 
     virtual std::string GetName();
-
     virtual boost::shared_ptr<Image> GetImage();
-
     virtual boost::shared_ptr<AlbumBrowse> Browse();
-
     virtual boost::shared_ptr<Artist> GetArtist();
 
-protected:
+  protected:
     friend class AlbumBrowse;
 
-    sp_album *pAlbum_;
+    sp_album *album_;
     boost::shared_ptr<Session> session_;
 };
-
 }

@@ -25,7 +25,7 @@
 
 namespace spotify {
 
-Track::Track(boost::shared_ptr<Session> session) : PlayListElement(session) {
+Track::Track(boost::shared_ptr<Session> session) : PlayListElement(session), track_(NULL) {
 }
 
 Track::~Track() {
@@ -33,34 +33,34 @@ Track::~Track() {
 }
 
 bool Track::Load(sp_track *track) {
-    pTrack_ = track;
-    sp_track_add_ref(pTrack_);
+    track_ = track;
+    sp_track_add_ref(track_);
     return true;
 }
 
 void Track::Unload() {
-    sp_track_release(pTrack_);
-    pTrack_ = NULL;
+    sp_track_release(track_);
+    track_ = NULL;
 }
 
 bool Track::IsLoading(bool recursive) {
-    if (!sp_track_is_loaded(pTrack_))
+    if (!sp_track_is_loaded(track_))
         return true;
 
     return false;
 }
 
 std::string Track::GetName() {
-    const char *name = sp_track_name(pTrack_);
+    const char *name = sp_track_name(track_);
     return name;
 }
 
 int Track::GetDuration() {
-    int duration = sp_track_duration(pTrack_);
+    int duration = sp_track_duration(track_);
     return duration;
 }
 
-PlayListElement::eType Track::GetType() {
+PlayListElement::PlayListType Track::GetType() {
     return TRACK;
 }
 
@@ -84,36 +84,36 @@ void Track::DumpToTTY(int level) {
 }
 
 int Track::GetNumArtists() {
-    return sp_track_num_artists(pTrack_);
+    return sp_track_num_artists(track_);
 }
 
 boost::shared_ptr<Artist> Track::GetArtist(int index) {
     boost::shared_ptr<Artist> artist = session_->CreateArtist();
-    artist->Load(sp_track_artist(pTrack_, index));
+    artist->Load(sp_track_artist(track_, index));
 
     return artist;
 }
 
 boost::shared_ptr<Album> Track::GetAlbum() {
     boost::shared_ptr<Album> album = session_->CreateAlbum();
-    album->Load(sp_track_album(pTrack_));
+    album->Load(sp_track_album(track_));
 
     return album;
 }
 
 int Track::GetDisc() {
-    return sp_track_disc(pTrack_);
+    return sp_track_disc(track_);
 }
 
 int Track::GetPopularity() {
-    return sp_track_popularity(pTrack_);
+    return sp_track_popularity(track_);
 }
 
 bool Track::IsStarred() {
-    return sp_track_is_starred(session_->pSession_, pTrack_);
+    return sp_track_is_starred(session_->session_, track_);
 }
 
 void Track::SetStarred(bool isStarred) {
-    sp_track_set_starred(session_->pSession_, &pTrack_, 1, isStarred);
+    sp_track_set_starred(session_->session_, &track_, 1, isStarred);
 }
 }

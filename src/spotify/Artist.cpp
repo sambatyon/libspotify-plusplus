@@ -20,31 +20,27 @@
 #include "spotify/Artist.hpp"
 
 namespace spotify {
-
-Artist::Artist(boost::shared_ptr<Session> session) {
-    pArtist_ = NULL;
-    session_ = session;
+Artist::Artist(boost::shared_ptr<Session> session) : artist_(NULL), session_(session) {
 }
 
 Artist::~Artist() {
-    sp_artist_release(pArtist_);
+    sp_artist_release(artist_);
 }
 
 void Artist::Load(sp_artist *pArtist) {
-    pArtist_ = pArtist;
-    sp_artist_add_ref(pArtist_);
+    artist_ = pArtist;
+    sp_artist_add_ref(artist_);
 }
 
 bool Artist::IsLoading() {
-    return !sp_artist_is_loaded(pArtist_);
+    return !sp_artist_is_loaded(artist_);
 }
 
 std::string Artist::GetName() {
-    return sp_artist_name(pArtist_);
+    return sp_artist_name(artist_);
 }
 
 boost::shared_ptr<ArtistBrowse> Artist::Browse() {
     return boost::shared_ptr<ArtistBrowse>(new ArtistBrowse(session_, boost::dynamic_pointer_cast<Artist>(shared_from_this())));
 }
-
 }

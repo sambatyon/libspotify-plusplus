@@ -20,22 +20,22 @@
 
 #include "spotify/LibConfig.hpp"
 
+// boost includes
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
 // std includes
 #include <string>
 
 // libspotify include
-#include "libspotify/api.h"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
+#include <libspotify/api.h>
 
 namespace spotify {
 // forward declarations
 class Session;
 
 class LIBSPOTIFYPP_API PlayListElement : virtual public boost::enable_shared_from_this<PlayListElement> {
-public:
+  public:
     PlayListElement(boost::shared_ptr<Session> session);
     virtual ~PlayListElement();
 
@@ -50,14 +50,15 @@ public:
 
     virtual std::string GetName() = 0;
 
-    enum eType {
+    enum PlayListType {
         PLAYLIST = 0,
         PLAYLIST_FOLDER,
         PLAYLIST_CONTAINER,
         TRACK
     };
 
-    virtual eType GetType() = 0;
+    /// @todo Having this kind of functions is a bad idea. Replace for visitors
+    virtual PlayListType GetType() = 0;
 
     virtual void AddPlayList(boost::shared_ptr<PlayListElement> playList) {}
 
@@ -68,14 +69,11 @@ public:
 
     boost::shared_ptr<Session> GetSession();
 
-protected:
-
+  protected:
     boost::weak_ptr<PlayListElement> parent_;
-
     boost::shared_ptr<Session> session_;
 
-private:
-    void *pUserData_;
+  private:
+    void *user_data_;
 };
-
 }

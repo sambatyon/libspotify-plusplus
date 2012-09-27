@@ -23,19 +23,18 @@
 #include "spotify/Disc.hpp"
 
 namespace spotify {
-AlbumBrowse::AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album) {
-    session_ = session;
-    album_ = album;
-
-    pAlbumBrowse_ = sp_albumbrowse_create(session->pSession_, album->pAlbum_, callback_albumbrowse_complete, this);
+AlbumBrowse::AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album) : session_(session)
+                                                                                             , album_(album)
+                                                                                             , album_browse_(NULL) {
+    album_browse_ = sp_albumbrowse_create(session->session_, album->album_, callback_albumbrowse_complete, this);
 }
 
 AlbumBrowse::~AlbumBrowse() {
-    sp_albumbrowse_release(pAlbumBrowse_);
+    sp_albumbrowse_release(album_browse_);
 }
 
 bool AlbumBrowse::IsLoading() {
-    return !sp_albumbrowse_is_loaded(pAlbumBrowse_);
+    return !sp_albumbrowse_is_loaded(album_browse_);
 }
 
 boost::shared_ptr<Album> AlbumBrowse::GetAlbum() {
@@ -47,23 +46,23 @@ boost::shared_ptr<Artist> AlbumBrowse::GetArtist() {
 }
 
 int AlbumBrowse::GetNumCopyrights() {
-    return sp_albumbrowse_num_copyrights(pAlbumBrowse_);
+    return sp_albumbrowse_num_copyrights(album_browse_);
 }
 
 std::string AlbumBrowse::GetCopyright(int index) {
-    std::string copyright = sp_albumbrowse_copyright(pAlbumBrowse_, index);
+    std::string copyright = sp_albumbrowse_copyright(album_browse_, index);
 
     return copyright;
 }
 
 std::string AlbumBrowse::GetReview() {
-    std::string review = sp_albumbrowse_review(pAlbumBrowse_);
+    std::string review = sp_albumbrowse_review(album_browse_);
 
     return review;
 }
 
 int AlbumBrowse::GetNumTracks() {
-    return sp_albumbrowse_num_tracks(pAlbumBrowse_);
+    return sp_albumbrowse_num_tracks(album_browse_);
 }
 
 int AlbumBrowse::GetNumDiscs() {
@@ -77,11 +76,10 @@ boost::shared_ptr<Disc> AlbumBrowse::GetDisc(int index) {
 }
 
 void SP_CALLCONV AlbumBrowse::callback_albumbrowse_complete(sp_albumbrowse *result, void *userdata) {
-    AlbumBrowse *pAlbumBrowse = reinterpret_cast<AlbumBrowse *>(userdata);
+    AlbumBrowse *album_browse = reinterpret_cast<AlbumBrowse *>(userdata);
 
-    BOOST_ASSERT(pAlbumBrowse->pAlbumBrowse_ == result);
+    BOOST_ASSERT(album_browse->album_browse_ == result);
 
-    pAlbumBrowse->OnComplete();
+    album_browse->OnComplete();
 }
-
 }

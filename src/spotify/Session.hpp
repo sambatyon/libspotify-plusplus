@@ -48,20 +48,18 @@ class Mutex;
 }
 
 class LIBSPOTIFYPP_API Session : public boost::enable_shared_from_this<Session> {
-public:
-
+  public:
     struct Config {
         Config();
 
-        const std::uint8_t *appKey_;
-        std::size_t appKeySize_;
-        const char *cacheLocation_;
-        const char *settingsLocation_;
-        const char *userAgent_;
-        bool compressPlaylists_;
-        bool dontSaveMetadataForPlaylists_;
-        bool initiallyUnloadPlaylists_;
-
+        const std::uint8_t *app_key;
+        std::size_t app_key_size;
+        const char *cache_location;
+        const char *settings_ocation;
+        const char *user_agent;
+        bool compress_playlists;
+        bool dont_saveMetadata_for_playlists;
+        bool initially_unload_playlists;
     };
 
     static boost::shared_ptr<Session> Create();
@@ -103,8 +101,7 @@ public:
     virtual boost::shared_ptr<Album> CreateAlbum();
     virtual boost::shared_ptr<Image> CreateImage();
 
-protected:
-
+  protected:
     virtual void Shutdown();
 
     // protected constructor, to force use of Create()
@@ -127,8 +124,7 @@ protected:
     virtual void OnStopPlayback();
     virtual void OnGetAudioBufferStats(sp_audio_buffer_stats *stats);
 
-private:
-
+  private:
     friend class Image;
     friend class Track;
     friend class ArtistBrowse;
@@ -141,7 +137,8 @@ private:
     static void SP_CALLCONV callback_connection_error(sp_session *session, sp_error error);
     static void SP_CALLCONV callback_message_to_user(sp_session *session, const char *message);
     static void SP_CALLCONV callback_notify_main_thread(sp_session *session);
-    static int  SP_CALLCONV callback_music_delivery(sp_session *session, const sp_audioformat *format, const void *frames, int num_frames);
+    static int  SP_CALLCONV callback_music_delivery(sp_session *session, const sp_audioformat *format, 
+                                                    const void *frames, int num_frames);
     static void SP_CALLCONV callback_play_token_lost(sp_session *session);
     static void SP_CALLCONV callback_log_message(sp_session *session, const char *data);
     static void SP_CALLCONV callback_end_of_track(sp_session *session);
@@ -151,12 +148,9 @@ private:
     static void SP_CALLCONV callback_stop_playback(sp_session *session);
     static void SP_CALLCONV callback_get_audio_buffer_stats(sp_session *session, sp_audio_buffer_stats *stats);
 
-    sp_session *pSession_;
-
-    volatile bool isProcessEventsRequired_;
-
-    volatile bool hasLoggedOut_;
-
+    sp_session *session_;
+    volatile bool is_process_events_required_;
+    volatile bool has_logged_out_;
     boost::shared_ptr<Track> track_; // currently playing track
 };
 

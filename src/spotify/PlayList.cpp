@@ -25,32 +25,35 @@
 #include "spotify/Track.hpp"
 
 // Debugging
-#include "debug/Debug.hpp"
+#include "spotify/debug/Debug.hpp"
 #define LOG( msg, ... ) //Debug::PrintLine( msg, __VA_ARGS__ )
 
+#include <cstdlib>
+
 namespace spotify {
-PlayList::PlayList(boost::shared_ptr<Session> session) : PlayListElement(session), pPlayList_(NULL), isLoading_(false) {
+PlayList::PlayList(boost::shared_ptr<Session> session) : PlayListElement(session), playlist_(NULL)
+                                                       , is_loading_(false) {
 }
 
 PlayList::~PlayList() {
     Unload();
 }
 
-PlayListElement::eType PlayList::GetType() {
+PlayListElement::PlayListType PlayList::GetType() {
     return PLAYLIST;
 }
 
 bool PlayList::Load(sp_playlist *playlist) {
-    pPlayList_ = playlist;
+    playlist_ = playlist;
     sp_playlist_add_ref(playlist);
 
     sp_playlist_callbacks callbacks;
     GetCallbacks(callbacks);
 
-    sp_playlist_add_callbacks(pPlayList_, &callbacks, this);
+    sp_playlist_add_callbacks(playlist_, &callbacks, this);
 
-    if (!sp_playlist_is_loaded(pPlayList_)) {
-        isLoading_ = true;
+    if (!sp_playlist_is_loaded(playlist_)) {
+        is_loading_ = true;
     } else {
         LoadTracks();
     }
@@ -59,13 +62,13 @@ bool PlayList::Load(sp_playlist *playlist) {
 }
 
 void PlayList::LoadTracks() {
-    int numTracks = sp_playlist_num_tracks(pPlayList_);
+    int num_tracks = sp_playlist_num_tracks(playlist_);
 
     tracks_.empty();
-    tracks_.reserve(numTracks);
+    tracks_.reserve(num_tracks);
 
-    for (int j = 0; j < numTracks; j++) {
-        sp_track *t = sp_playlist_track(pPlayList_, j);
+    for (int j = 0; j < num_tracks; j++) {
+        sp_track *t = sp_playlist_track(playlist_, j);
 
         boost::shared_ptr<Track> track = session_->CreateTrack();
         track->Load(t);
@@ -75,34 +78,29 @@ void PlayList::LoadTracks() {
 }
 
 void PlayList::Unload() {
-    if (pPlayList_) {
+    if (playlist_) {
         sp_playlist_callbacks callbacks;
         GetCallbacks(callbacks);
 
-        sp_playlist_remove_callbacks(pPlayList_, &callbacks, this);
+        sp_playlist_remove_callbacks(playlist_, &callbacks, this);
 
-        sp_playlist_release(pPlayList_);
+        sp_playlist_release(playlist_);
         tracks_.clear();
 
-        isLoading_ = false;
-        pPlayList_ = NULL;
+        is_loading_ = false;
+        playlist_ = NULL;
     }
 }
 
 bool PlayList::IsLoading(bool recursive) {
-    //bool isLoaded = sp_playlist_is_loaded( pPlayList_ );
-
-
-    int numTracks = GetNumTracks();
+    int num_tracks = GetNumTracks();
 
     // is playlist, or any of its' tracks loading?
-
-    if (isLoading_) {
+    if (is_loading_)
         return true;
-    }
 
     if (recursive) {
-        for (int i = 0; i < numTracks; i++) {
+        for (int i = 0; i < num_tracks; i++) {
             if (tracks_[i]->IsLoading(recursive)) {
                 return true;
             }
@@ -117,11 +115,11 @@ int PlayList::GetNumTracks() {
 }
 
 boost::shared_ptr<Track> PlayList::GetTrack(int index) {
-    return tracks_[ index ];
+    return tracks_[index];
 }
 
 std::string PlayList::GetName() {
-    const char *name = sp_playlist_name(pPlayList_);
+    const char *name = sp_playlist_name(playlist_);
     return name;
 }
 
@@ -140,17 +138,16 @@ boost::shared_ptr<PlayListElement> PlayList::GetChild(int index) {
 void PlayList::DumpToTTY(int level) {
     debug::PrintLine(level, "PlayList [%s]", GetName().c_str());
 
-    level ++;
+    level++;
 
-    int numTracks = GetNumTracks();
+    int num_tracks = GetNumTracks();
 
-    for (int i = 0; i < numTracks; i++) {
+    for (int i = 0; i < num_tracks; i++)
         GetTrack(i)->DumpToTTY(level);
-    }
 }
 
 void PlayList::GetCallbacks(sp_playlist_callbacks &callbacks) {
-    memset(&callbacks, 0, sizeof(callbacks));
+    std::memset(&callbacks, 0, sizeof(callbacks));
 
     callbacks.description_changed = callback_description_changed;
     callbacks.image_changed = callback_image_changed;
@@ -166,77 +163,80 @@ void PlayList::GetCallbacks(sp_playlist_callbacks &callbacks) {
 }
 
 PlayList *PlayList::GetPlayListFromUserData(sp_playlist *pl, void *userdata) {
-    PlayList *pPlayList = reinterpret_cast<PlayList *>(userdata);
-    assert(pPlayList->pPlayList_ == pl);
+    PlayList *playlist = reinterpret_cast<PlayList *>(userdata);
+    BOOST_ASSERT(playlist->playlist_ == pl);
 
-    return pPlayList;
+    return playlist;
 }
 
-void PlayList::callback_tracks_added(sp_playlist *pl, sp_track *const *tracks, int num_tracks, int position, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnTracksAdded(tracks, num_tracks, position);
+void PlayList::callback_tracks_added(sp_playlist *pl, sp_track *const *tracks, int num_tracks, int position, 
+                                     void *userdata) {
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnTracksAdded(tracks, num_tracks, position);
 }
 
 void PlayList::callback_tracks_removed(sp_playlist *pl, const int *tracks, int num_tracks, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnTracksRemoved(tracks, num_tracks);
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnTracksRemoved(tracks, num_tracks);
 }
 
-void PlayList::callback_tracks_moved(sp_playlist *pl, const int *tracks, int num_tracks, int new_position, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnTracksMoved(tracks, num_tracks, new_position);
+void PlayList::callback_tracks_moved(sp_playlist *pl, const int *tracks, int num_tracks, int new_position, 
+                                     void *userdata) {
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnTracksMoved(tracks, num_tracks, new_position);
 }
 
 void PlayList::callback_playlist_renamed(sp_playlist *pl, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnPlaylistRenamed();
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnPlaylistRenamed();
 }
 
 void PlayList::callback_playlist_state_changed(sp_playlist *pl, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnPlaylistStateChanged();
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnPlaylistStateChanged();
 }
 
 void PlayList::callback_playlist_update_in_progress(sp_playlist *pl, bool done, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnPlaylistUpdateInProgress(done);
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnPlaylistUpdateInProgress(done);
 }
 
 void PlayList::callback_playlist_metadata_updated(sp_playlist *pl, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnPlaylistMetadataUpdated();
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnPlaylistMetadataUpdated();
 }
 
-void PlayList::callback_track_created_changed(sp_playlist *pl, int position, sp_user *user, int when, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnTrackCreatedChanged(position, user, when);
+void PlayList::callback_track_created_changed(sp_playlist *pl, int position, sp_user *user, int when, 
+                                              void *userdata) {
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnTrackCreatedChanged(position, user, when);
 }
 
 void PlayList::callback_track_seen_changed(sp_playlist *pl, int position, bool seen, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnTrackSeenChanged(position, seen);
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnTrackSeenChanged(position, seen);
 }
 
 void PlayList::callback_description_changed(sp_playlist *pl, const char *desc, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnDescriptionChanged(desc);
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnDescriptionChanged(desc);
 }
 
 void PlayList::callback_image_changed(sp_playlist *pl, const byte *image, void *userdata) {
-    PlayList *pPlayList = GetPlayListFromUserData(pl, userdata);
-    pPlayList->OnImageChanged(image);
+    PlayList *play_list = GetPlayListFromUserData(pl, userdata);
+    play_list->OnImageChanged(image);
 }
 
-void PlayList::OnTracksAdded(sp_track *const *tracks, int numTracks, int position) {
-    LOG("PlayList::OnTracksAdded [0x%08X] numTracks[%d] position[%d]", this, numTracks, position);
+void PlayList::OnTracksAdded(sp_track *const *tracks, int num_tracks, int position) {
+    LOG("PlayList::OnTracksAdded [0x%08X] num_tracks[%d] position[%d]", this, num_tracks, position);
 }
 
-void PlayList::OnTracksRemoved(const int *tracks, int numTracks) {
-    LOG("PlayList::OnTracksRemoved [0x%08X] numTracks[%d]", this, numTracks);
+void PlayList::OnTracksRemoved(const int *tracks, int num_tracks) {
+    LOG("PlayList::OnTracksRemoved [0x%08X] num_tracks[%d]", this, num_tracks);
 }
 
-void PlayList::OnTracksMoved(const int *tracks, int numTracks, int newPosition) {
-    LOG("PlayList::OnTracksMoved [0x%08X] numTracks[%d] newPosition[%d]", this, numTracks, newPosition);
+void PlayList::OnTracksMoved(const int *tracks, int num_tracks, int new_position) {
+    LOG("PlayList::OnTracksMoved [0x%08X] num_tracks[%d] new_position[%d]", this, num_tracks, new_position);
 }
 
 void PlayList::OnPlaylistRenamed() {
@@ -244,12 +244,12 @@ void PlayList::OnPlaylistRenamed() {
 }
 
 void PlayList::OnPlaylistStateChanged() {
-    bool isLoaded = sp_playlist_is_loaded(pPlayList_);
+    bool loaded = sp_playlist_is_loaded(playlist_);
 
     LOG("PlayList::OnPlaylistStateChanged [0x%08X] m_isLoading [%d] isLoaded [%d]", this, isLoading_, isLoaded);
 
-    if (isLoading_ && isLoaded) {
-        isLoading_ = false;
+    if (is_loading_ && loaded) {
+        is_loading_ = false;
 
         LoadTracks();
     }
@@ -278,8 +278,4 @@ void PlayList::OnDescriptionChanged(const char *desc) {
 void PlayList::OnImageChanged(const byte *image) {
     LOG("PlayList::OnImageChanged [0x%08X]", this);
 }
-
-
-
 } // Spotify
-

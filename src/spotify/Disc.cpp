@@ -20,3 +20,5 @@
 #include "spotify/Disc.hpp"
 
 /// @todo implement this
+namespace spotify {
+}

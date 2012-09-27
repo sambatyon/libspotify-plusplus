@@ -23,8 +23,7 @@
 namespace spotify {
 namespace core {
 class Mutex {
-public:
-
+  public:
     Mutex(const char *name = "");
     virtual ~Mutex();
 
@@ -32,17 +31,16 @@ public:
     void Lock();
     void Unlock();
 
-private:
+  private:
     boost::mutex mutex_;
 };
 
 class ScopedLock {
-public:
-    ScopedLock(Mutex *pMutex);
+  public:
+    ScopedLock(Mutex *mutex);
     virtual ~ScopedLock();
-private:
-    Mutex *pMutex_;
+  private:
+    Mutex *mutex_;
 };
-
 }
 }

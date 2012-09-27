@@ -18,28 +18,26 @@
 
 #pragma once
 
+// Local Includes
 #include "spotify/LibConfig.hpp"
+#include "spotify/PlayListElement.hpp"
+
+// boost includes
+#include <boost/shared_ptr.hpp>
 
 // std includes
 #include <vector>
 #include <string>
 
 // libspotify Includes
-#include "libspotify/api.h"
-
-// Local Includes
-#include "spotify/PlayListElement.hpp"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
+#include <libspotify/api.h>
 
 namespace spotify {
 // forward declaration
 class Session;
 
 class LIBSPOTIFYPP_API PlayListFolder : public PlayListElement {
-public:
-
+  public:
     PlayListFolder(boost::shared_ptr<Session> session);
     virtual ~PlayListFolder();
 
@@ -50,7 +48,7 @@ public:
 
     virtual bool IsLoading(bool recursive);
 
-    virtual eType GetType();
+    virtual PlayListType GetType();
 
     virtual void DumpToTTY(int level = 0);
 
@@ -62,12 +60,11 @@ public:
     virtual int GetNumChildren();
     virtual boost::shared_ptr<PlayListElement> GetChild(int index);
 
-private:
+  private:
+    typedef std::vector<boost::shared_ptr<PlayListElement>> PlayListStore;
+    PlayListStore playlists_;
 
-    typedef std::vector< boost::shared_ptr<PlayListElement> > PlayListStore;
-    PlayListStore playLists_;
-
-    sp_playlistcontainer *pContainer_;
-    int containerIndex_;
+    sp_playlistcontainer *container_;
+    int container_index_;
 };
 }

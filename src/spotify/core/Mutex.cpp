@@ -38,15 +38,14 @@ void Mutex::Unlock() {
     mutex_.unlock();
 }
 
-ScopedLock::ScopedLock(Mutex *pMutex) {
-    pMutex_ = pMutex;
-    pMutex_->Lock();
+ScopedLock::ScopedLock(Mutex *mutex) {
+    mutex_ = mutex;
+    mutex_->Lock();
 }
 
 ScopedLock::~ScopedLock() {
-    pMutex_->Unlock();
-    pMutex_ = NULL;
+    mutex_->Unlock();
+    mutex_ = NULL;
 }
-
 } // Core
 } // Spotify

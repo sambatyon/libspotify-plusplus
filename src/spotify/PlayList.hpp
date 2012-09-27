@@ -18,20 +18,19 @@
 
 #pragma once
 
+// local includes
 #include "spotify/LibConfig.hpp"
+#include "spotify/PlayListElement.hpp"
+
+// boost includes
+#include <boost/shared_ptr.hpp>
 
 // std includes
 #include <vector>
 #include <string>
 
 // libspotify include
-#include "libspotify/api.h"
-
-// local includes
-#include "spotify/PlayListElement.hpp"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
+#include <libspotify/api.h>
 
 namespace spotify {
 // forward declarations
@@ -39,15 +38,14 @@ class Session;
 class Track;
 
 class LIBSPOTIFYPP_API PlayList : public PlayListElement {
-public:
+  public:
     PlayList(boost::shared_ptr<Session> session);
     virtual ~PlayList();
 
-    virtual eType GetType();
+    virtual PlayListType GetType();
 
     virtual bool Load(sp_playlist *playlist);
     virtual void Unload();
-
     virtual bool IsLoading(bool recursive);
 
     virtual int GetNumTracks();
@@ -61,10 +59,10 @@ public:
 
     virtual void DumpToTTY(int level = 0);
 
-protected:
-    virtual void OnTracksAdded(sp_track *const *tracks, int numTracks, int position);
-    virtual void OnTracksRemoved(const int *tracks, int numTracks);
-    virtual void OnTracksMoved(const int *tracks, int numTracks, int newPosition);
+  protected:
+    virtual void OnTracksAdded(sp_track *const *tracks, int num_tracks, int position);
+    virtual void OnTracksRemoved(const int *tracks, int num_tracks);
+    virtual void OnTracksMoved(const int *tracks, int num_tracks, int new_position);
     virtual void OnPlaylistRenamed();
     virtual void OnPlaylistStateChanged();
     virtual void OnPlaylistUpdateInProgress(bool done);
@@ -76,17 +74,21 @@ protected:
 
     virtual void LoadTracks();
 
-private:
+  private:
     friend class Session;
 
-    static void SP_CALLCONV callback_tracks_added(sp_playlist *pl, sp_track *const *tracks, int num_tracks, int position, void *userdata);
-    static void SP_CALLCONV callback_tracks_removed(sp_playlist *pl, const int *tracks, int num_tracks, void *userdata);
-    static void SP_CALLCONV callback_tracks_moved(sp_playlist *pl, const int *tracks, int num_tracks, int new_position, void *userdata);
+    static void SP_CALLCONV callback_tracks_added(sp_playlist *pl, sp_track *const *tracks, int num_tracks, 
+                                                  int position, void *userdata);
+    static void SP_CALLCONV callback_tracks_removed(sp_playlist *pl, const int *tracks, int num_tracks, 
+                                                    void *userdata);
+    static void SP_CALLCONV callback_tracks_moved(sp_playlist *pl, const int *tracks, int num_tracks, 
+                                                  int new_position, void *userdata);
     static void SP_CALLCONV callback_playlist_renamed(sp_playlist *pl, void *userdata);
     static void SP_CALLCONV callback_playlist_state_changed(sp_playlist *pl, void *userdata);
     static void SP_CALLCONV callback_playlist_update_in_progress(sp_playlist *pl, bool done, void *userdata);
     static void SP_CALLCONV callback_playlist_metadata_updated(sp_playlist *pl, void *userdata);
-    static void SP_CALLCONV callback_track_created_changed(sp_playlist *pl, int position, sp_user *user, int when, void *userdata);
+    static void SP_CALLCONV callback_track_created_changed(sp_playlist *pl, int position, sp_user *user, int when, 
+                                                           void *userdata);
     static void SP_CALLCONV callback_track_seen_changed(sp_playlist *pl, int position, bool seen, void *userdata);
     static void SP_CALLCONV callback_description_changed(sp_playlist *pl, const char *desc, void *userdata);
     static void SP_CALLCONV callback_image_changed(sp_playlist *pl, const byte *image, void *userdata);
@@ -94,11 +96,9 @@ private:
     static void GetCallbacks(sp_playlist_callbacks &callbacks);
     static PlayList *GetPlayListFromUserData(sp_playlist *pl, void *userdata);
 
-    sp_playlist *pPlayList_;
-
-    bool isLoading_;
-
-    typedef std::vector< boost::shared_ptr<Track> > TrackStore;
+    sp_playlist *playlist_;
+    bool is_loading_;
+    typedef std::vector<boost::shared_ptr<Track>> TrackStore;
     TrackStore tracks_;
 };
 }

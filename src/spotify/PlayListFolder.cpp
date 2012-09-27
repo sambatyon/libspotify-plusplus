@@ -23,7 +23,8 @@
 #include "debug/Debug.hpp"
 
 namespace spotify {
-PlayListFolder::PlayListFolder(boost::shared_ptr<Session> session) : PlayListElement(session), pContainer_(NULL), containerIndex_(-1) {
+PlayListFolder::PlayListFolder(boost::shared_ptr<Session> session) : PlayListElement(session), playlists_()
+                                                                   , container_(NULL), container_index_(-1) {
 }
 
 PlayListFolder::~PlayListFolder() {
@@ -31,79 +32,76 @@ PlayListFolder::~PlayListFolder() {
 }
 
 bool PlayListFolder::IsLoading(bool recursive) {
-    int numPlayLists = playLists_.size();
+    int numPlayLists = playlists_.size();
 
-    if (!pContainer_) {
+    if (!container_)
         return false;
-    }
 
     if (recursive) {
         for (int i = 0; i < numPlayLists; i++) {
-            if (playLists_[i]->IsLoading(recursive)) {
+            if (playlists_[i]->IsLoading(recursive))
                 return true;
-            }
         }
     }
 
     return false;
 }
 
-PlayListElement::eType PlayListFolder::GetType() {
+PlayListElement::PlayListType PlayListFolder::GetType() {
     return PLAYLIST_FOLDER;
 }
 
 bool PlayListFolder::Load(sp_playlistcontainer *container, int index) {
-    pContainer_ = container;
-    containerIndex_ = index;
+    container_ = container;
+    container_index_ = index;
 
     return true;
 }
 
 void PlayListFolder::Unload() {
-    pContainer_ = NULL;
-    containerIndex_ = -1;
+    container_ = NULL;
+    container_index_ = -1;
 }
 
 void PlayListFolder::AddPlayList(boost::shared_ptr<PlayListElement> playList) {
     playList->SetParent(shared_from_this());
-    playLists_.push_back(playList);
+    playlists_.push_back(playList);
 }
 
 std::string PlayListFolder::GetName() {
     const int BUFFER_SIZE = 256;
     char buffer[BUFFER_SIZE];
-    sp_playlistcontainer_playlist_folder_name(pContainer_, containerIndex_, buffer, BUFFER_SIZE);
+    sp_playlistcontainer_playlist_folder_name(container_, container_index_, buffer, BUFFER_SIZE);
 
     std::string folderName = buffer;
     return folderName;
 }
 
 sp_uint64 PlayListFolder::GetGroupID() {
-    sp_uint64 groupID = sp_playlistcontainer_playlist_folder_id(pContainer_, containerIndex_);
+    sp_uint64 groupID = sp_playlistcontainer_playlist_folder_id(container_, container_index_);
     return groupID;
 }
 
 bool PlayListFolder::HasChildren() {
-    return !playLists_.empty();
+    return !playlists_.empty();
 }
 
 int PlayListFolder::GetNumChildren() {
-    return playLists_.size();
+    return playlists_.size();
 }
 
 boost::shared_ptr<PlayListElement> PlayListFolder::GetChild(int index) {
-    return playLists_[index];
+    return playlists_[index];
 }
 
 void PlayListFolder::DumpToTTY(int level) {
     debug::PrintLine(level, "Folder [%s]", GetName().c_str());
 
-    level ++;
+    level++;
 
     int numPlayLists = GetNumChildren();
 
-    for (int i = 0; i < numPlayLists; i++) {
+    for (int i = 0; i < numPlayLists; i++)
         GetChild(i)->DumpToTTY(level);
-    }
 }
 }

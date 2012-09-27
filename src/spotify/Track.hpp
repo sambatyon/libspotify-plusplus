@@ -18,15 +18,8 @@
 
 #pragma once
 
-#include "spotify/LibConfig.hpp"
-
-// std include
-#include <string>
-
-// libspotify include
-#include "libspotify/api.h"
-
 // Local Includes
+#include "spotify/LibConfig.hpp"
 #include "spotify/PlayListElement.hpp"
 #include "spotify/Artist.hpp"
 #include "spotify/Album.hpp"
@@ -34,19 +27,23 @@
 // boost includes
 #include <boost/shared_ptr.hpp>
 
+// std include
+#include <string>
+
+// libspotify include
+#include <libspotify/api.h>
+
 namespace spotify {
 // forward declaration
 class Session;
 
 class LIBSPOTIFYPP_API Track : public PlayListElement {
-public:
+  public:
     Track(boost::shared_ptr<Session> session);
     virtual ~Track();
 
     virtual bool Load(sp_track *track);
-
     virtual void Unload();
-
     virtual bool IsLoading(bool recursive);
 
     virtual std::string GetName();
@@ -54,32 +51,25 @@ public:
     virtual int GetDuration();
 
     virtual bool HasChildren();
-
     virtual int GetNumChildren();
-
     virtual boost::shared_ptr<PlayListElement> GetChild(int index);
 
-    virtual eType GetType();
+    virtual PlayListType GetType();
 
     virtual int GetNumArtists();
-
     virtual boost::shared_ptr<Artist> GetArtist(int index);
-
     virtual boost::shared_ptr<Album> GetAlbum();
 
     virtual int GetDisc();
-
     virtual int GetPopularity();
-
     virtual bool IsStarred();
-
     virtual void SetStarred(bool isStarred);
 
     virtual void DumpToTTY(int level = 0);
 
-private:
+  private:
     friend class Session;
 
-    sp_track *pTrack_;
+    sp_track *track_;
 };
 }

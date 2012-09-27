@@ -21,7 +21,7 @@
 
 
 namespace spotify {
-PlayListElement::PlayListElement(boost::shared_ptr<Session> session) : session_(session), pUserData_(NULL) {
+PlayListElement::PlayListElement(boost::shared_ptr<Session> session) : session_(session), user_data_(NULL) {
 }
 
 PlayListElement::~PlayListElement() {
@@ -36,15 +36,14 @@ void PlayListElement::SetParent(boost::shared_ptr<PlayListElement> parent) {
 }
 
 void *PlayListElement::GetUserData() {
-    return pUserData_;
+    return user_data_;
 }
 
-void PlayListElement::SetUserData(void *pUserData) {
-    pUserData_ = pUserData;
+void PlayListElement::SetUserData(void *user_data) {
+    user_data_ = user_data;
 }
 
 boost::shared_ptr<Session> PlayListElement::GetSession() {
     return session_;
 }
-
 } // spotify

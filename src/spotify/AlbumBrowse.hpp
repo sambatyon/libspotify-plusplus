@@ -20,14 +20,14 @@
 
 #include "spotify/LibConfig.hpp"
 
+// boost includes
+#include <boost/shared_ptr.hpp>
+
 // std include
 #include <string>
 
 // libspotify include
 #include "libspotify/api.h"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
 
 namespace spotify {
 // forward declaration
@@ -38,42 +38,29 @@ class Track;
 class Disc;
 
 class LIBSPOTIFYPP_API AlbumBrowse {
-public:
+  public:
     AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album);
     ~AlbumBrowse();
 
     bool IsLoading();
-
     boost::shared_ptr<Album> GetAlbum();
-
     boost::shared_ptr<Artist> GetArtist();
-
     int GetNumCopyrights();
-
     std::string GetCopyright(int index);
-
     std::string GetReview();
-
     int GetNumTracks();
-
     boost::shared_ptr<Track> GetTrack(int index);
-
     int GetNumDiscs();
-
     boost::shared_ptr<Disc> GetDisc(int index);
 
-protected:
-
+  protected:
     virtual void OnComplete() {}
 
-private:
-
+  private:
     static void SP_CALLCONV callback_albumbrowse_complete(sp_albumbrowse *result, void *userdata);
 
     boost::shared_ptr<Session> session_;
     boost::shared_ptr<Album> album_;
-
-    sp_albumbrowse *pAlbumBrowse_;
+    sp_albumbrowse *album_browse_;
 };
-
 }
