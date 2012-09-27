@@ -53,14 +53,14 @@ public:
     struct Config {
         Config();
 
-        const uint8_t	*appKey_;
-        size_t			appKeySize_;
-        const char		*cacheLocation_;
-        const char		*settingsLocation_;
-        const char		*userAgent_;
-        bool			compressPlaylists_;
-        bool			dontSaveMetadataForPlaylists_;
-        bool			initiallyUnloadPlaylists_;
+        const std::uint8_t *appKey_;
+        std::size_t appKeySize_;
+        const char *cacheLocation_;
+        const char *settingsLocation_;
+        const char *userAgent_;
+        bool compressPlaylists_;
+        bool dontSaveMetadataForPlaylists_;
+        bool initiallyUnloadPlaylists_;
 
     };
 
@@ -68,44 +68,44 @@ public:
 
     virtual ~Session();
 
-    virtual sp_error	Initialise(Config &config);
+    virtual sp_error Initialise(Config &config);
 
-    virtual void		Update();
+    virtual void Update();
 
-    virtual void		Login(const char *username, const char *password, bool rememberMe = false);
-    virtual void		Logout();
+    virtual void Login(const char *username, const char *password, bool rememberMe = false);
+    virtual void Logout();
 
-    virtual bool		IsLoggedIn();
+    virtual bool IsLoggedIn();
 
     virtual sp_connectionstate GetConnectionState();
 
-    virtual sp_error	Load(boost::shared_ptr<Track> track);
-    virtual void		Unload(boost::shared_ptr<Track> track);
-    virtual boost::shared_ptr<Track>		GetCurrentTrack();
-    virtual void		Seek(int offset);
-    virtual void		Play();
-    virtual void		Stop();
+    virtual sp_error Load(boost::shared_ptr<Track> track);
+    virtual void Unload(boost::shared_ptr<Track> track);
+    virtual boost::shared_ptr<Track> GetCurrentTrack();
+    virtual void Seek(int offset);
+    virtual void Play();
+    virtual void Stop();
 
-    virtual sp_error	PreFetch(boost::shared_ptr<Track> track);
+    virtual sp_error PreFetch(boost::shared_ptr<Track> track);
 
-    virtual boost::shared_ptr<PlayListContainer>	GetPlayListContainer();
+    virtual boost::shared_ptr<PlayListContainer> GetPlayListContainer();
 
-    virtual boost::shared_ptr<PlayList>		GetStarredPlayList();
+    virtual boost::shared_ptr<PlayList> GetStarredPlayList();
 
-    virtual void		SetPreferredBitrate(sp_bitrate bitrate);
+    virtual void SetPreferredBitrate(sp_bitrate bitrate);
 
     // factory functions
-    virtual boost::shared_ptr<PlayList>				CreatePlayList();
-    virtual boost::shared_ptr<PlayListContainer>	CreatePlayListContainer();
-    virtual boost::shared_ptr<PlayListFolder>		CreatePlayListFolder();
-    virtual boost::shared_ptr<Track>				CreateTrack();
-    virtual boost::shared_ptr<Artist>				CreateArtist();
-    virtual boost::shared_ptr<Album>				CreateAlbum();
-    virtual boost::shared_ptr<Image>				CreateImage();
+    virtual boost::shared_ptr<PlayList> CreatePlayList();
+    virtual boost::shared_ptr<PlayListContainer> CreatePlayListContainer();
+    virtual boost::shared_ptr<PlayListFolder> CreatePlayListFolder();
+    virtual boost::shared_ptr<Track> CreateTrack();
+    virtual boost::shared_ptr<Artist> CreateArtist();
+    virtual boost::shared_ptr<Album> CreateAlbum();
+    virtual boost::shared_ptr<Image> CreateImage();
 
 protected:
 
-    virtual void		Shutdown();
+    virtual void Shutdown();
 
     // protected constructor, to force use of Create()
     Session();
@@ -151,13 +151,13 @@ private:
     static void SP_CALLCONV callback_stop_playback(sp_session *session);
     static void SP_CALLCONV callback_get_audio_buffer_stats(sp_session *session, sp_audio_buffer_stats *stats);
 
-    sp_session		*pSession_;
+    sp_session *pSession_;
 
-    volatile bool	isProcessEventsRequired_;
+    volatile bool isProcessEventsRequired_;
 
-    volatile bool	hasLoggedOut_;
+    volatile bool hasLoggedOut_;
 
-    boost::shared_ptr<Track>	track_;		// currently playing track
+    boost::shared_ptr<Track> track_; // currently playing track
 };
 
 }

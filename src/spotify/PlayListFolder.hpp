@@ -59,15 +59,15 @@ public:
     virtual sp_uint64 GetGroupID();
 
     virtual bool HasChildren();
-    virtual int	GetNumChildren();
+    virtual int GetNumChildren();
     virtual boost::shared_ptr<PlayListElement> GetChild(int index);
 
 private:
 
-    typedef std::vector< boost::shared_ptr<PlayListElement> >	PlayListStore;
-    PlayListStore					playLists_;
+    typedef std::vector< boost::shared_ptr<PlayListElement> > PlayListStore;
+    PlayListStore playLists_;
 
-    sp_playlistcontainer			*pContainer_;
-    int								containerIndex_;
+    sp_playlistcontainer *pContainer_;
+    int containerIndex_;
 };
 }

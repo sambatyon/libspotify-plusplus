@@ -63,19 +63,19 @@ public:
 
     virtual void DumpToTTY(int level = 0) = 0;
 
-    void				*GetUserData();
-    void				SetUserData(void *pUserData);
+    void *GetUserData();
+    void SetUserData(void *pUserData);
 
     boost::shared_ptr<Session> GetSession();
 
 protected:
 
-    boost::weak_ptr<PlayListElement>	parent_;
+    boost::weak_ptr<PlayListElement> parent_;
 
-    boost::shared_ptr<Session>	session_;
+    boost::shared_ptr<Session> session_;
 
 private:
-    void				*pUserData_;
+    void *pUserData_;
 };
 
 }

@@ -26,7 +26,7 @@
 
 // debugging
 #include "debug/Debug.hpp"
-#define LOG( msg, ... )	//Debug::PrintLine( msg, __VA_ARGS__ );
+#define LOG( msg, ... ) //Debug::PrintLine( msg, __VA_ARGS__ );
 
 namespace spotify {
 PlayListContainer::PlayListContainer(boost::shared_ptr<Session> session) : PlayListElement(session), pContainer_(NULL), isLoading_(false) {

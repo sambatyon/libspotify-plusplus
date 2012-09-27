@@ -46,9 +46,9 @@ public:
 
 protected:
 
-    sp_image	*pImage_;
+    sp_image *pImage_;
 
-    boost::shared_ptr<Session>	session_;
+    boost::shared_ptr<Session> session_;
 };
 
 

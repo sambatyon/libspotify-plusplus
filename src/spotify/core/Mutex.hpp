@@ -28,12 +28,12 @@ public:
     Mutex(const char *name = "");
     virtual ~Mutex();
 
-    bool		TryLock();
-    void		Lock();
-    void		Unlock();
+    bool TryLock();
+    void Lock();
+    void Unlock();
 
 private:
-    boost::mutex	mutex_;
+    boost::mutex mutex_;
 };
 
 class ScopedLock {
@@ -41,7 +41,7 @@ public:
     ScopedLock(Mutex *pMutex);
     virtual ~ScopedLock();
 private:
-    Mutex		*pMutex_;
+    Mutex *pMutex_;
 };
 
 }

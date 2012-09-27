@@ -55,8 +55,8 @@ protected:
 
     friend class ArtistBrowse;
 
-    sp_artist		*pArtist_;
-    boost::shared_ptr<Session>	session_;
+    sp_artist *pArtist_;
+    boost::shared_ptr<Session> session_;
 };
 
 }

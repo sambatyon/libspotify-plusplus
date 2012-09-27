@@ -73,7 +73,7 @@ private:
     boost::shared_ptr<Session> session_;
     boost::shared_ptr<Album> album_;
 
-    sp_albumbrowse	*pAlbumBrowse_;
+    sp_albumbrowse *pAlbumBrowse_;
 };
 
 }

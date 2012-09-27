@@ -45,20 +45,20 @@ public:
 
     virtual eType GetType();
 
-    virtual bool	Load(sp_playlistcontainer *container);
-    virtual void	Unload();
+    virtual bool Load(sp_playlistcontainer *container);
+    virtual void Unload();
 
-    virtual bool	IsLoading(bool recursive);
+    virtual bool IsLoading(bool recursive);
 
-    virtual void	AddPlayList(boost::shared_ptr<PlayListElement> playList);
+    virtual void AddPlayList(boost::shared_ptr<PlayListElement> playList);
 
-    virtual bool	HasChildren();
-    virtual int		GetNumChildren();
+    virtual bool HasChildren();
+    virtual int GetNumChildren();
     virtual boost::shared_ptr<PlayListElement> GetChild(int index);
 
     virtual std::string GetName();
 
-    virtual void	DumpToTTY(int level = 0);
+    virtual void DumpToTTY(int level = 0);
 
 protected:
 
@@ -79,11 +79,11 @@ private:
     static PlayListContainer *GetPlayListContainer(sp_playlistcontainer *pc, void *userdata);
 
 
-    sp_playlistcontainer	*pContainer_;
+    sp_playlistcontainer *pContainer_;
 
-    bool	isLoading_;
+    bool isLoading_;
 
-    typedef std::vector< boost::shared_ptr<PlayListElement> >	PlayListStore;
-    PlayListStore					playLists_;
+    typedef std::vector< boost::shared_ptr<PlayListElement> > PlayListStore;
+    PlayListStore playLists_;
 };
 }

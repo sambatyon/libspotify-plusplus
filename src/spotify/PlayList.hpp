@@ -99,6 +99,6 @@ private:
     bool isLoading_;
 
     typedef std::vector< boost::shared_ptr<Track> > TrackStore;
-    TrackStore		tracks_;
+    TrackStore tracks_;
 };
 }

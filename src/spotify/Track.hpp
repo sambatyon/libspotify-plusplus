@@ -80,6 +80,6 @@ public:
 private:
     friend class Session;
 
-    sp_track	*pTrack_;
+    sp_track *pTrack_;
 };
 }
