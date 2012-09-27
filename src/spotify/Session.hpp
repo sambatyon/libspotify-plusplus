@@ -18,15 +18,17 @@
 
 #pragma once
 
-// C-libs includes
-#include <stdint.h>
-
-// libspotify includes
-#include "libspotify/api.h"
+#include "spotify/LibConfig.hpp"
 
 // boost includes
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+
+// C-libs includes
+#include <cstdint>
+
+// libspotify includes
+#include "libspotify/api.h"
 
 namespace spotify {
 class Album;
@@ -45,7 +47,7 @@ namespace core {
 class Mutex;
 }
 
-class Session : public boost::enable_shared_from_this<Session> {
+class LIBSPOTIFYPP_API Session : public boost::enable_shared_from_this<Session> {
 public:
 
     struct Config {

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "spotify/LibConfig.hpp"
+
 // std includes
 #include <vector>
 #include <string>
@@ -35,7 +37,7 @@ namespace spotify {
 // forward declaration
 class Session;
 
-class PlayListContainer : public PlayListElement {
+class LIBSPOTIFYPP_API PlayListContainer : public PlayListElement {
 public:
 
     PlayListContainer(boost::shared_ptr<Session> session);

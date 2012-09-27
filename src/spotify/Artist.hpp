@@ -19,6 +19,7 @@
 #pragma once
 
 // Local includes
+#include "spotify/LibConfig.hpp"
 #include "spotify/ArtistBrowse.hpp"
 
 // std include
@@ -36,7 +37,7 @@ namespace spotify {
 class Session;
 class ArtistBrowse;
 
-class Artist : public boost::enable_shared_from_this<Artist> {
+class LIBSPOTIFYPP_API Artist : public boost::enable_shared_from_this<Artist> {
 public:
 
     Artist(boost::shared_ptr<Session> session);

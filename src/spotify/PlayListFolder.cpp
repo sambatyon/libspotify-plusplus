@@ -20,7 +20,7 @@
 #include "spotify/PlayListFolder.hpp"
 
 // Local Includes
-#include "Debug/Debug.hpp"
+#include "debug/Debug.hpp"
 
 namespace spotify {
 PlayListFolder::PlayListFolder(boost::shared_ptr<Session> session) : PlayListElement(session), pContainer_(NULL), containerIndex_(-1) {

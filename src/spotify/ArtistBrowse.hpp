@@ -19,6 +19,7 @@
 #pragma once
 
 // local includes
+#include "spotify/LibConfig.hpp"
 #include "spotify/Image.hpp"
 #include "spotify/Track.hpp"
 #include "spotify/Album.hpp"
@@ -37,7 +38,7 @@ namespace spotify {
 class Session;
 class Artist;
 
-class ArtistBrowse {
+class LIBSPOTIFYPP_API ArtistBrowse {
 public:
     ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Artist> artist);
     ~ArtistBrowse();

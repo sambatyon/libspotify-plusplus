@@ -19,6 +19,7 @@
 #pragma once
 
 // local includes
+#include "spotify/LibConfig.hpp"
 #include "spotify/AlbumBrowse.hpp"
 
 // std include
@@ -37,7 +38,7 @@ class Image;
 class Session;
 class Artist;
 
-class Album : public boost::enable_shared_from_this<Album> {
+class LIBSPOTIFYPP_API Album : public boost::enable_shared_from_this<Album> {
 public:
 
     Album(boost::shared_ptr<Session> session);

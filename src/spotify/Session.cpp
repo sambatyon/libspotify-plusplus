@@ -29,7 +29,7 @@
 #include "spotify/Track.hpp"
 
 // debugging
-#include "Debug/Debug.hpp"
+#include "debug/Debug.hpp"
 #define LOG( msg, ... )	//Debug::PrintLine( msg, __VA_ARGS__ );
 
 namespace spotify {

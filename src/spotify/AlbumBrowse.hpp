@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "spotify/LibConfig.hpp"
+
 // std include
 #include <string>
 
@@ -35,7 +37,7 @@ class Artist;
 class Track;
 class Disc;
 
-class AlbumBrowse {
+class LIBSPOTIFYPP_API AlbumBrowse {
 public:
     AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album);
     ~AlbumBrowse();

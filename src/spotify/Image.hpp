@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "spotify/LibConfig.hpp"
+
 // libspotify includes
 #include "libspotify/api.h"
 
@@ -29,7 +31,7 @@ namespace spotify {
 // forward declaration
 class Session;
 
-class Image : public boost::enable_shared_from_this<Image> {
+class LIBSPOTIFYPP_API Image : public boost::enable_shared_from_this<Image> {
 public:
 
     Image(boost::shared_ptr<Session> session);

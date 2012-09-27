@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "spotify/LibConfig.hpp"
+
 // std includes
 #include <vector>
 
@@ -32,7 +34,7 @@ class Album;
 /// @class Disc
 /// @brief A collection of tracks making up a disc of an album
 /// @brief (where an album could have multiple discs)
-class Disc {
+class LIBSPOTIFYPP_API Disc {
 public:
     int GetNumTracks();
 

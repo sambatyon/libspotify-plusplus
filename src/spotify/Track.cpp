@@ -21,7 +21,7 @@
 #include "spotify/Session.hpp"
 
 // Local includes
-#include "Debug/Debug.hpp"
+#include "debug/Debug.hpp"
 
 namespace spotify {
 

@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "spotify/Core/Mutex.hpp"
+#include "spotify/core/Mutex.hpp"
 
 namespace spotify {
 namespace debug {
