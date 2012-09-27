@@ -18,19 +18,19 @@
 
 #pragma once
 
-// local includes
-#include "spotify/LibConfig.hpp"
-#include "spotify/Playlist.hpp"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
+// libspotify include
+#include <libspotify/api.h>
 
 // std includes
 #include <vector>
 #include <string>
 
-// libspotify include
-#include <libspotify/api.h>
+// boost includes
+#include <boost/shared_ptr.hpp>
+
+// local includes
+#include "spotify/LibConfig.hpp"
+#include "spotify/Playlist.hpp"
 
 namespace spotify {
 // forward declaration
@@ -38,7 +38,7 @@ class Session;
 
 class LIBSPOTIFYPP_API PlayListContainer : public PlayListElement {
   public:
-    PlayListContainer(boost::shared_ptr<Session> session);
+    explicit PlayListContainer(boost::shared_ptr<Session> session);
     virtual ~PlayListContainer();
 
     virtual PlayListType GetType();
@@ -66,15 +66,15 @@ class LIBSPOTIFYPP_API PlayListContainer : public PlayListElement {
   private:
     friend class Session;
 
-    static void SP_CALLCONV callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+    static void SP_CALLCONV callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position,
                                                     void *userdata);
-    static void SP_CALLCONV callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+    static void SP_CALLCONV callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position,
                                                       void *userdata);
-    static void SP_CALLCONV callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+    static void SP_CALLCONV callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position,
                                                     int new_position, void *userdata);
     static void SP_CALLCONV callback_container_loaded(sp_playlistcontainer *pc, void *userdata);
 
-    static void GetCallbacks(sp_playlistcontainer_callbacks &callbacks);
+    static void GetCallbacks(sp_playlistcontainer_callbacks *callbacks);
     static PlayListContainer *GetPlayListContainer(sp_playlistcontainer *pc, void *userdata);
 
     sp_playlistcontainer *container_;

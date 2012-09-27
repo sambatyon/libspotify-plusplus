@@ -18,19 +18,19 @@
 
 #pragma once
 
-// Local Includes
-#include "spotify/LibConfig.hpp"
-#include "spotify/PlayListElement.hpp"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
+// libspotify Includes
+#include <libspotify/api.h>
 
 // std includes
 #include <vector>
 #include <string>
 
-// libspotify Includes
-#include <libspotify/api.h>
+// boost includes
+#include <boost/shared_ptr.hpp>
+
+// Local Includes
+#include "spotify/LibConfig.hpp"
+#include "spotify/PlayListElement.hpp"
 
 namespace spotify {
 // forward declaration
@@ -38,7 +38,7 @@ class Session;
 
 class LIBSPOTIFYPP_API PlayListFolder : public PlayListElement {
   public:
-    PlayListFolder(boost::shared_ptr<Session> session);
+    explicit PlayListFolder(boost::shared_ptr<Session> session);
     virtual ~PlayListFolder();
 
     virtual bool Load(sp_playlistcontainer *container, int index);

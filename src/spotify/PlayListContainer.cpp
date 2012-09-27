@@ -15,21 +15,20 @@
  * limitations under the License.
  *
  */
+#include "spotify/PlayListContainer.hpp"
 
 // c-lib includes
-#include <assert.h>
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/logger.h>
 
-// local includes
-#include "spotify/PlayListContainer.hpp"
-#include "spotify/PlayListFolder.hpp"
-#include "spotify/Session.hpp"
+#include <cstdlib>
+#include <string>
 
 #include <boost/format.hpp>
 
-#include <cstdlib>
-
-#include <log4cplus/loggingmacros.h>
-#include <log4cplus/logger.h>
+// local includes
+#include "spotify/PlayListFolder.hpp"
+#include "spotify/Session.hpp"
 
 namespace spotify {
 namespace {
@@ -48,19 +47,19 @@ PlayListElement::PlayListType PlayListContainer::GetType() {
     return PLAYLIST_CONTAINER;
 }
 
-void PlayListContainer::GetCallbacks(sp_playlistcontainer_callbacks &callbacks) {
-    std::memset(&callbacks, 0, sizeof(callbacks));
+void PlayListContainer::GetCallbacks(sp_playlistcontainer_callbacks *callbacks) {
+    std::memset(callbacks, 0, sizeof(*callbacks));
 
-    callbacks.container_loaded = callback_container_loaded;
-    callbacks.playlist_added = callback_playlist_added;
-    callbacks.playlist_moved = callback_playlist_moved;
-    callbacks.playlist_removed = callback_playlist_removed;
+    callbacks->container_loaded = callback_container_loaded;
+    callbacks->playlist_added = callback_playlist_added;
+    callbacks->playlist_moved = callback_playlist_moved;
+    callbacks->playlist_removed = callback_playlist_removed;
 }
 
 bool PlayListContainer::Load(sp_playlistcontainer *container) {
     container_ = container;
     sp_playlistcontainer_callbacks callbacks;
-    GetCallbacks(callbacks);
+    GetCallbacks(&callbacks);
     sp_playlistcontainer_add_callbacks(container_, &callbacks, this);
     loading_ = true;
     return true;
@@ -69,7 +68,7 @@ bool PlayListContainer::Load(sp_playlistcontainer *container) {
 void PlayListContainer::Unload() {
     if (container_) {
         sp_playlistcontainer_callbacks callbacks;
-        GetCallbacks(callbacks);
+        GetCallbacks(&callbacks);
         sp_playlistcontainer_remove_callbacks(container_, &callbacks, this);
         container_ = NULL;
         playlists_.clear();
@@ -135,19 +134,19 @@ PlayListContainer *PlayListContainer::GetPlayListContainer(sp_playlistcontainer 
     return container;
 }
 
-void PlayListContainer::callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+void PlayListContainer::callback_playlist_added(sp_playlistcontainer *pc, sp_playlist *playlist, int position,
                                                 void *userdata) {
     PlayListContainer *container = GetPlayListContainer(pc, userdata);
     container->OnPlaylistAdded(playlist, position);
 }
 
-void PlayListContainer::callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+void PlayListContainer::callback_playlist_removed(sp_playlistcontainer *pc, sp_playlist *playlist, int position,
                                                   void *userdata) {
     PlayListContainer *container = GetPlayListContainer(pc, userdata);
     container->OnPlaylistRemoved(playlist, position);
 }
 
-void PlayListContainer::callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position, 
+void PlayListContainer::callback_playlist_moved(sp_playlistcontainer *pc, sp_playlist *playlist, int position,
                                                 int new_position, void *userdata) {
     PlayListContainer *container = GetPlayListContainer(pc, userdata);
     container->OnPlaylistMoved(playlist, position, new_position);

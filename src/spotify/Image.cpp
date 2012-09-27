@@ -18,9 +18,10 @@
 
 // local includes
 #include "spotify/Image.hpp"
-#include "spotify/Session.hpp"
 
 #include <log4cplus/logger.h>
+
+#include "spotify/Session.hpp"
 
 namespace spotify {
 namespace {
@@ -55,8 +56,8 @@ bool Image::IsLoading() {
     return false;
 }
 
-const void *Image::GetData(size_t &outDataSize) {
-    outDataSize = 0;
+const void *Image::GetData(std::size_t *out_data_size) {
+    out_data_size = 0;
 
     if (!image_)
         return NULL;
@@ -65,6 +66,6 @@ const void *Image::GetData(size_t &outDataSize) {
         return NULL;
     }
 
-    return sp_image_data(image_, &outDataSize);
+    return sp_image_data(image_, out_data_size);
 }
 }

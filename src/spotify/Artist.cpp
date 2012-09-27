@@ -21,6 +21,8 @@
 
 #include <log4cplus/logger.h>
 
+#include <string>
+
 namespace spotify {
 namespace {
 log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.Artist");
@@ -47,6 +49,7 @@ std::string Artist::GetName() {
 }
 
 boost::shared_ptr<ArtistBrowse> Artist::Browse() {
-    return boost::shared_ptr<ArtistBrowse>(new ArtistBrowse(session_, boost::dynamic_pointer_cast<Artist>(shared_from_this())));
+    return boost::shared_ptr<ArtistBrowse>(new ArtistBrowse(session_,
+                                                            boost::dynamic_pointer_cast<Artist>(shared_from_this())));
 }
 }

@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 PROJECT(libspotifypp CXX)
 
+
 # set output to the given folders
 SET(BIN_OUTPUT_DIR ${libspotifypp_BINARY_DIR}/bin)
 SET(LIB_OUTPUT_DIR ${libspotifypp_BINARY_DIR}/lib)
@@ -19,3 +20,15 @@ IF(MSVC)
 ENDIF()
 
 ADD_SUBDIRECTORY(src)
+#ADD_SUBDIRECTORY(tests)
+
+MESSAGE(STATUS ${sources})
+
+ENABLE_TESTING(TRUE)
+
+#ADD_TEST(TestTest ${BIN_OUTPUT_DIR}/TestTest)
+
+FIND_PACKAGE(PythonInterp 2.7)
+IF(PYTHONINTERP_FOUND)
+    ADD_TEST(TestStyle  "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/cpplint.py" "${CMAKE_SOURCE_DIR}/src")
+ENDIF()

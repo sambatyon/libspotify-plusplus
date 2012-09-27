@@ -18,17 +18,17 @@
 
 #pragma once
 
-#include "spotify/LibConfig.hpp"
+// libspotify includes
+#include <libspotify/api.h>
+
+// C-libs includes
+#include <cstdint>
 
 // boost includes
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-// C-libs includes
-#include <cstdint>
-
-// libspotify includes
-#include "libspotify/api.h"
+#include "spotify/LibConfig.hpp"
 
 namespace spotify {
 class Album;
@@ -66,7 +66,7 @@ class LIBSPOTIFYPP_API Session : public boost::enable_shared_from_this<Session> 
 
     virtual ~Session();
 
-    virtual sp_error Initialise(Config &config);
+    virtual sp_error Initialise(const Config &config);
 
     virtual void Update();
 
@@ -137,7 +137,7 @@ class LIBSPOTIFYPP_API Session : public boost::enable_shared_from_this<Session> 
     static void SP_CALLCONV callback_connection_error(sp_session *session, sp_error error);
     static void SP_CALLCONV callback_message_to_user(sp_session *session, const char *message);
     static void SP_CALLCONV callback_notify_main_thread(sp_session *session);
-    static int  SP_CALLCONV callback_music_delivery(sp_session *session, const sp_audioformat *format, 
+    static int  SP_CALLCONV callback_music_delivery(sp_session *session, const sp_audioformat *format,
                                                     const void *frames, int num_frames);
     static void SP_CALLCONV callback_play_token_lost(sp_session *session);
     static void SP_CALLCONV callback_log_message(sp_session *session, const char *data);
@@ -151,8 +151,6 @@ class LIBSPOTIFYPP_API Session : public boost::enable_shared_from_this<Session> 
     sp_session *session_;
     volatile bool is_process_events_required_;
     volatile bool has_logged_out_;
-    boost::shared_ptr<Track> track_; // currently playing track
+    boost::shared_ptr<Track> track_;  // currently playing track
 };
-
 }
-

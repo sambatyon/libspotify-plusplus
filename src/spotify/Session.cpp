@@ -19,6 +19,11 @@
 // Includes
 #include "spotify/Session.hpp"
 
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/logger.h>
+
+#include <boost/format.hpp>
+
 #include "spotify/Album.hpp"
 #include "spotify/Artist.hpp"
 #include "spotify/Image.hpp"
@@ -27,11 +32,6 @@
 #include "spotify/PlayListElement.hpp"
 #include "spotify/PlayListFolder.hpp"
 #include "spotify/Track.hpp"
-
-#include <boost/format.hpp>
-
-#include <log4cplus/loggingmacros.h>
-#include <log4cplus/logger.h>
 
 namespace spotify {
 namespace {
@@ -60,7 +60,7 @@ Session::~Session() {
     Shutdown();
 }
 
-sp_error Session::Initialise(Config &config) {
+sp_error Session::Initialise(const Config &config) {
     sp_session_config sp_config;
 
     sp_config.api_version = SPOTIFY_API_VERSION;
@@ -296,7 +296,7 @@ void SP_CALLCONV Session::callback_notify_main_thread(sp_session *session) {
     sess->is_process_events_required_ = true;
 }
 
-int  SP_CALLCONV Session::callback_music_delivery(sp_session *session, const sp_audioformat *format, 
+int  SP_CALLCONV Session::callback_music_delivery(sp_session *session, const sp_audioformat *format,
                                                   const void *frames, int num_frames) {
     Session *sess = GetSessionFromUserdata(session);
     return sess->OnMusicDelivery(format, frames, num_frames);
@@ -368,7 +368,7 @@ void Session::OnNotifyMainThread() {
 }
 
 int  Session::OnMusicDelivery(const sp_audioformat *format, const void *frames, int num_frames) {
-    LOG4CPLUS_TRACE(logger, (boost::format("Session::OnMusicDelivery [%d]") 
+    LOG4CPLUS_TRACE(logger, (boost::format("Session::OnMusicDelivery [%d]")
                                            % (reinterpret_cast<const int*>(frames))[0]));
 
     // pretend that we have consumed all of the audio frames

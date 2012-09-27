@@ -18,13 +18,13 @@
 
 #pragma once
 
-#include "spotify/LibConfig.hpp"
+// std includes
+#include <vector>
 
 // boost includes
 #include <boost/shared_ptr.hpp>
 
-// std includes
-#include <vector>
+#include "spotify/LibConfig.hpp"
 
 namespace spotify {
 // forward declaration

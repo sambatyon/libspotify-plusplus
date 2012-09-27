@@ -18,16 +18,16 @@
 
 #pragma once
 
-#include "spotify/LibConfig.hpp"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
+// libspotify include
+#include <libspotify/api.h>
 
 // std include
 #include <string>
 
-// libspotify include
-#include "libspotify/api.h"
+// boost includes
+#include <boost/shared_ptr.hpp>
+
+#include "spotify/LibConfig.hpp"
 
 namespace spotify {
 // forward declaration
@@ -40,7 +40,7 @@ class Disc;
 class LIBSPOTIFYPP_API AlbumBrowse {
   public:
     AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album);
-    ~AlbumBrowse();
+    virtual ~AlbumBrowse();
 
     bool IsLoading();
     boost::shared_ptr<Album> GetAlbum();

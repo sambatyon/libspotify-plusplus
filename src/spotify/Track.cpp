@@ -15,15 +15,17 @@
  * limitations under the License.
  *
  */
-
-// lib includes
-#include "spotify/Session.hpp"
 #include "spotify/Track.hpp"
-
-#include <boost/format.hpp>
 
 #include <log4cplus/loggingmacros.h>
 #include <log4cplus/logger.h>
+
+#include <string>
+
+#include <boost/format.hpp>
+
+// lib includes
+#include "spotify/Session.hpp"
 
 namespace spotify {
 namespace {

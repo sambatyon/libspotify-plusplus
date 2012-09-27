@@ -18,11 +18,14 @@
 
 // local includes
 #include "spotify/Album.hpp"
+
+#include <log4cplus/logger.h>
+
+#include <string>
+
 #include "spotify/Image.hpp"
 #include "spotify/Session.hpp"
 #include "spotify/Artist.hpp"
-
-#include <log4cplus/logger.h>
 
 namespace spotify {
 namespace {
@@ -67,7 +70,7 @@ boost::shared_ptr<Image> Album::GetImage() {
 }
 
 boost::shared_ptr<AlbumBrowse> Album::Browse() {
-    return boost::shared_ptr<AlbumBrowse>(new AlbumBrowse(session_, 
+    return boost::shared_ptr<AlbumBrowse>(new AlbumBrowse(session_,
                                                           boost::dynamic_pointer_cast<Album>(shared_from_this())));
 }
 

@@ -18,19 +18,23 @@
 
 // local includes
 #include "spotify/ArtistBrowse.hpp"
-#include "spotify/Session.hpp"
-#include "spotify/Artist.hpp"
 
 #include <log4cplus/logger.h>
+
+#include <string>
+
+#include "spotify/Session.hpp"
+#include "spotify/Artist.hpp"
 
 namespace spotify {
 namespace {
 log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.ArtistBrowse");
 }
 
-ArtistBrowse::ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Artist> artist) 
+ArtistBrowse::ArtistBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Artist> artist)
     : session_(session) , artist_(artist) , artist_browse_(NULL) {
-    artist_browse_ = sp_artistbrowse_create(session->session_, artist->artist_, SP_ARTISTBROWSE_FULL, callback_artistbrowse_complete, this);
+    artist_browse_ = sp_artistbrowse_create(session->session_, artist->artist_, SP_ARTISTBROWSE_FULL,
+                                            callback_artistbrowse_complete, this);
 }
 
 ArtistBrowse::~ArtistBrowse() {

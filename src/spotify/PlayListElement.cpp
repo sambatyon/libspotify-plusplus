@@ -15,7 +15,6 @@
  * limitations under the License.
  *
  */
-
 #include "spotify/PlayListElement.hpp"
 #include "spotify/Session.hpp"
 
@@ -46,4 +45,4 @@ void PlayListElement::SetUserData(void *user_data) {
 boost::shared_ptr<Session> PlayListElement::GetSession() {
     return session_;
 }
-} // spotify
+}  // namespace spotify

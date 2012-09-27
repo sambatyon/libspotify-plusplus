@@ -18,14 +18,14 @@
 
 #pragma once
 
-#include "spotify/LibConfig.hpp"
+// libspotify includes
+#include <libspotify/api.h>
 
 // boost includes
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-// libspotify includes
-#include <libspotify/api.h>
+#include "spotify/LibConfig.hpp"
 
 namespace spotify {
 // forward declaration
@@ -33,14 +33,14 @@ class Session;
 
 class LIBSPOTIFYPP_API Image : public boost::enable_shared_from_this<Image> {
   public:
-    Image(boost::shared_ptr<Session> session);
+    explicit Image(boost::shared_ptr<Session> session);
     virtual ~Image();
 
     virtual bool Load(const byte *image_id);
     virtual void Unload();
     virtual bool IsLoading();
 
-    virtual const void *GetData(std::size_t &dataSize);
+    virtual const void *GetData(std::size_t *data_size);
 
   protected:
     sp_image *image_;

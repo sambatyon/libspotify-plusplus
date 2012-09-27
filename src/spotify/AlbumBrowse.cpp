@@ -15,19 +15,22 @@
  * limitations under the License.
  *
  */
+#include "spotify/AlbumBrowse.hpp"
+
+#include <log4cplus/logger.h>
+
+#include <string>
 
 // local includes
-#include "spotify/AlbumBrowse.hpp"
 #include "spotify/Session.hpp"
 #include "spotify/Album.hpp"
 #include "spotify/Disc.hpp"
-
-#include <log4cplus/logger.h>
 
 namespace spotify {
 namespace {
 log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.AlbumBrowse");
 }
+
 AlbumBrowse::AlbumBrowse(boost::shared_ptr<Session> session, boost::shared_ptr<Album> album) : session_(session)
                                                                                              , album_(album)
                                                                                              , album_browse_(NULL) {

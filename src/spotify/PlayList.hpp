@@ -18,19 +18,19 @@
 
 #pragma once
 
-// local includes
-#include "spotify/LibConfig.hpp"
-#include "spotify/PlayListElement.hpp"
-
-// boost includes
-#include <boost/shared_ptr.hpp>
+// libspotify include
+#include <libspotify/api.h>
 
 // std includes
 #include <vector>
 #include <string>
 
-// libspotify include
-#include <libspotify/api.h>
+// boost includes
+#include <boost/shared_ptr.hpp>
+
+// local includes
+#include "spotify/LibConfig.hpp"
+#include "spotify/PlayListElement.hpp"
 
 namespace spotify {
 // forward declarations
@@ -39,7 +39,7 @@ class Track;
 
 class LIBSPOTIFYPP_API PlayList : public PlayListElement {
   public:
-    PlayList(boost::shared_ptr<Session> session);
+    explicit PlayList(boost::shared_ptr<Session> session);
     virtual ~PlayList();
 
     virtual PlayListType GetType();
@@ -77,23 +77,23 @@ class LIBSPOTIFYPP_API PlayList : public PlayListElement {
   private:
     friend class Session;
 
-    static void SP_CALLCONV callback_tracks_added(sp_playlist *pl, sp_track *const *tracks, int num_tracks, 
+    static void SP_CALLCONV callback_tracks_added(sp_playlist *pl, sp_track *const *tracks, int num_tracks,
                                                   int position, void *userdata);
-    static void SP_CALLCONV callback_tracks_removed(sp_playlist *pl, const int *tracks, int num_tracks, 
+    static void SP_CALLCONV callback_tracks_removed(sp_playlist *pl, const int *tracks, int num_tracks,
                                                     void *userdata);
-    static void SP_CALLCONV callback_tracks_moved(sp_playlist *pl, const int *tracks, int num_tracks, 
+    static void SP_CALLCONV callback_tracks_moved(sp_playlist *pl, const int *tracks, int num_tracks,
                                                   int new_position, void *userdata);
     static void SP_CALLCONV callback_playlist_renamed(sp_playlist *pl, void *userdata);
     static void SP_CALLCONV callback_playlist_state_changed(sp_playlist *pl, void *userdata);
     static void SP_CALLCONV callback_playlist_update_in_progress(sp_playlist *pl, bool done, void *userdata);
     static void SP_CALLCONV callback_playlist_metadata_updated(sp_playlist *pl, void *userdata);
-    static void SP_CALLCONV callback_track_created_changed(sp_playlist *pl, int position, sp_user *user, int when, 
+    static void SP_CALLCONV callback_track_created_changed(sp_playlist *pl, int position, sp_user *user, int when,
                                                            void *userdata);
     static void SP_CALLCONV callback_track_seen_changed(sp_playlist *pl, int position, bool seen, void *userdata);
     static void SP_CALLCONV callback_description_changed(sp_playlist *pl, const char *desc, void *userdata);
     static void SP_CALLCONV callback_image_changed(sp_playlist *pl, const byte *image, void *userdata);
 
-    static void GetCallbacks(sp_playlist_callbacks &callbacks);
+    static void GetCallbacks(sp_playlist_callbacks *callbacks);
     static PlayList *GetPlayListFromUserData(sp_playlist *pl, void *userdata);
 
     sp_playlist *playlist_;

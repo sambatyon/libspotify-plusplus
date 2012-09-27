@@ -15,20 +15,19 @@
  * limitations under the License.
  *
  */
-
 #pragma once
 
-#include "spotify/LibConfig.hpp"
+// libspotify include
+#include <libspotify/api.h>
+
+// std includes
+#include <string>
 
 // boost includes
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-// std includes
-#include <string>
-
-// libspotify include
-#include <libspotify/api.h>
+#include "spotify/LibConfig.hpp"
 
 namespace spotify {
 // forward declarations
@@ -36,7 +35,7 @@ class Session;
 
 class LIBSPOTIFYPP_API PlayListElement : virtual public boost::enable_shared_from_this<PlayListElement> {
   public:
-    PlayListElement(boost::shared_ptr<Session> session);
+    explicit PlayListElement(boost::shared_ptr<Session> session);
     virtual ~PlayListElement();
 
     virtual boost::shared_ptr<PlayListElement> GetParent() const;

@@ -19,11 +19,12 @@
 // Lib Includes
 #include "spotify/PlayListFolder.hpp"
 
-#include <boost/format.hpp>
-
 #include <log4cplus/loggingmacros.h>
 #include <log4cplus/logger.h>
 
+#include <string>
+
+#include <boost/format.hpp>
 
 namespace spotify {
 namespace {
