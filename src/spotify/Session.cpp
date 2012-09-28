@@ -22,6 +22,7 @@
 #include <log4cplus/loggingmacros.h>
 #include <log4cplus/logger.h>
 
+#include <boost/make_shared.hpp>
 #include <boost/format.hpp>
 
 #include "spotify/Album.hpp"
@@ -38,7 +39,7 @@ namespace {
 log4cplus::Logger logger = log4cplus::Logger::getInstance("spotify.Session");
 }
 
-Session::Config::Config() {
+Config::Config() {
     app_key = NULL;
     app_key_size = 0;
     cache_location = "";
@@ -49,11 +50,11 @@ Session::Config::Config() {
     initially_unload_playlists = false;
 }
 
-boost::shared_ptr< Session > Session::Create() {
-    return boost::shared_ptr< Session >(new Session());
+boost::shared_ptr<Session> Session::Create() {
+    return boost::shared_ptr<Session>(boost::make_shared<Session>());
 }
 
-Session::Session() : session_(NULL), is_process_events_required_(false), has_logged_out_(NULL) {
+Session::Session() : session_(), is_process_events_required_(false), has_logged_out_(NULL) {
 }
 
 Session::~Session() {
@@ -61,7 +62,7 @@ Session::~Session() {
 }
 
 sp_error Session::Initialise(const Config &config) {
-    sp_session_config sp_config;
+    sp_session_config sp_config = {0};
 
     sp_config.api_version = SPOTIFY_API_VERSION;
 
@@ -107,28 +108,28 @@ void Session::Shutdown() {
     if (session_) {
         if (track_)
             Unload(track_);
-
         // clear any remaining events
         Update();
-
         // release the session
-        sp_session_release(session_);
-
+        // for some reason, the session release generates segfaults
+        // sp_session_release(session_);
         session_ = NULL;
     }
 }
 
-void Session::Update() {
+int Session::Update() {
     if (session_) {
         is_process_events_required_ = false;
-        int nextTimeout = 0;
-        sp_session_process_events(session_, &nextTimeout);
+        int next_timeout = 0;
+        sp_session_process_events(session_, &next_timeout);
+        return next_timeout;
     }
+    return -1;
 }
 
-void Session::Login(const char *username, const char *password, bool rememberMe) {
+void Session::Login(const char *username, const char *password, bool remember_me) {
     has_logged_out_ = false;
-    sp_session_login(session_, username, password, rememberMe, NULL);
+    sp_session_login(session_, username, password, remember_me, NULL);
 }
 
 void Session::Logout() {
@@ -136,7 +137,9 @@ void Session::Logout() {
 }
 
 bool Session::IsLoggedIn() {
-    bool is_logged_in = session_ && !has_logged_out_ && (GetConnectionState() == SP_CONNECTION_STATE_LOGGED_IN);
+    sp_connectionstate state = GetConnectionState();
+    LOG4CPLUS_TRACE(logger, (boost::format("conn state: %d") % state));
+    bool is_logged_in = session_ && !has_logged_out_ && (state == SP_CONNECTION_STATE_LOGGED_IN);
     return is_logged_in;
 }
 
@@ -255,8 +258,17 @@ boost::shared_ptr<Image> Session::CreateImage() {
     return boost::shared_ptr<Image>(new Image(shared_from_this()));
 }
 
+void Session::connectToOnLoggedIn(boost::function<void (sp_error)> callback) { // NOLINT
+    on_loggedin_.connect(callback);
+}
+
+void Session::connectToOnNotifyMainThread(boost::function<void ()> callback) { // NOLINT
+    on_notify_main_thread_.connect(callback);
+}
+
 namespace {
-static Session *GetSessionFromUserdata(sp_session *session) {
+inline
+Session *GetSessionFromUserdata(sp_session *session) {
     Session *sess = reinterpret_cast<Session *>(sp_session_userdata(session));
     return sess;
 }
@@ -269,9 +281,7 @@ void SP_CALLCONV Session::callback_logged_in(sp_session *session, sp_error error
 
 void SP_CALLCONV Session::callback_logged_out(sp_session *session) {
     Session *sess = GetSessionFromUserdata(session);
-
     sess->has_logged_out_ = true;
-
     sess->OnLoggedOut();
 }
 
@@ -343,7 +353,8 @@ void SP_CALLCONV Session::callback_get_audio_buffer_stats(sp_session *session, s
 }
 
 void Session::OnLoggedIn(sp_error error) {
-    LOG4CPLUS_TRACE(logger, "Session::OnLoggedIn");
+    LOG4CPLUS_TRACE(logger, (boost::format("Session::OnLoggedIn: %s") % sp_error_message(error)));
+    on_loggedin_(error);
 }
 
 void Session::OnLoggedOut() {
@@ -365,6 +376,7 @@ void Session::OnMessageToUser(const char *message) {
 
 void Session::OnNotifyMainThread() {
     LOG4CPLUS_TRACE(logger, "Session::OnNotifyMainThread");
+    on_notify_main_thread_();
 }
 
 int  Session::OnMusicDelivery(const sp_audioformat *format, const void *frames, int num_frames) {

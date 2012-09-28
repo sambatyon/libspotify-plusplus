@@ -9,6 +9,7 @@ days I have refactored so much that I don't hope to merge it back again.
 Dependencies
 - libspotify 12 (as provided by spotify)
 - boost c++ libraries
+- boos threadpool (not official part of boost, available [here](http://threadpool.sourceforge.net/)
 - log4cplus
 - A C++ compiler which has the same level of support for C++11 as VC++ 2012 does
 - CMake 2.8

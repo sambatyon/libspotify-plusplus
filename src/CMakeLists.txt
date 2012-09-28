@@ -1,5 +1,5 @@
 SET(Boost_USE_STATIC_LIBS ON)
-FIND_PACKAGE(Boost REQUIRED thread system date_time chrono)
+FIND_PACKAGE(Boost REQUIRED thread system date_time chrono signals)
 FIND_PACKAGE(libspotify REQUIRED)
 FIND_PACKAGE(Log4cplus REQUIRED)
 

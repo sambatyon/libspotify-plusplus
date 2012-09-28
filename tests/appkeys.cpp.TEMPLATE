@@ -1,0 +1,34 @@
+#include "appkeys.hpp"
+
+#include <log4cplus/configurator.h>
+#include <log4cplus/logger.h>
+
+#include <cstdint>
+#include <cstddef>
+
+#include <boost/thread/once.hpp>
+#include <boost/filesystem.hpp>
+
+const std::uint8_t SpotifyBasicFixture::app_key[] = {0};
+
+namespace {
+boost::once_flag once = BOOST_ONCE_INIT;
+}
+
+SpotifyBasicFixture::SpotifyBasicFixture() : key_size(sizeof(app_key)), username(""), password(""), configuration() {
+    boost::call_once([] {
+        log4cplus::BasicConfigurator config;
+        if (boost::filesystem::exists("logging.conf"))
+            log4cplus::PropertyConfigurator::doConfigure("logging.conf");
+        else
+            config.configure();
+    }, once);
+    configuration.app_key = app_key;
+    configuration.app_key_size = key_size;
+    configuration.cache_location = "tmp";
+    configuration.settings_ocation = "tmp";
+    configuration.user_agent = "libspotifypp";
+}
+
+SpotifyBasicFixture::~SpotifyBasicFixture() {
+}

@@ -25,8 +25,11 @@
 #include <cstdint>
 
 // boost includes
-#include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
+#include <boost/signal.hpp>
 
 #include "spotify/LibConfig.hpp"
 
@@ -42,87 +45,84 @@ class Track;
 class AlbumBrowse;
 class ArtistBrowse;
 
-namespace core {
-// forward declaration
-class Mutex;
-}
+struct LIBSPOTIFYPP_API Config {
+    Config();
+
+    const std::uint8_t *app_key;
+    std::size_t app_key_size;
+    const char *cache_location;
+    const char *settings_ocation;
+    const char *user_agent;
+    bool compress_playlists;
+    bool dont_saveMetadata_for_playlists;
+    bool initially_unload_playlists;
+};
 
 class LIBSPOTIFYPP_API Session : public boost::enable_shared_from_this<Session> {
   public:
-    struct Config {
-        Config();
-
-        const std::uint8_t *app_key;
-        std::size_t app_key_size;
-        const char *cache_location;
-        const char *settings_ocation;
-        const char *user_agent;
-        bool compress_playlists;
-        bool dont_saveMetadata_for_playlists;
-        bool initially_unload_playlists;
-    };
-
     static boost::shared_ptr<Session> Create();
 
-    virtual ~Session();
+    Session();
+    ~Session();
 
-    virtual sp_error Initialise(const Config &config);
+    sp_error Initialise(const Config &config);
 
-    virtual void Update();
+    int Update();
 
-    virtual void Login(const char *username, const char *password, bool rememberMe = false);
-    virtual void Logout();
+    void Login(const char *username, const char *password, bool remember_me = false);
+    void Logout();
 
-    virtual bool IsLoggedIn();
+    bool IsLoggedIn();
 
-    virtual sp_connectionstate GetConnectionState();
+    sp_connectionstate GetConnectionState();
 
-    virtual sp_error Load(boost::shared_ptr<Track> track);
-    virtual void Unload(boost::shared_ptr<Track> track);
-    virtual boost::shared_ptr<Track> GetCurrentTrack();
-    virtual void Seek(int offset);
-    virtual void Play();
-    virtual void Stop();
+    sp_error Load(boost::shared_ptr<Track> track);
+    void Unload(boost::shared_ptr<Track> track);
+    boost::shared_ptr<Track> GetCurrentTrack();
+    void Seek(int offset);
+    void Play();
+    void Stop();
 
-    virtual sp_error PreFetch(boost::shared_ptr<Track> track);
+    sp_error PreFetch(boost::shared_ptr<Track> track);
 
-    virtual boost::shared_ptr<PlayListContainer> GetPlayListContainer();
+    boost::shared_ptr<PlayListContainer> GetPlayListContainer();
 
-    virtual boost::shared_ptr<PlayList> GetStarredPlayList();
+    boost::shared_ptr<PlayList> GetStarredPlayList();
 
-    virtual void SetPreferredBitrate(sp_bitrate bitrate);
+    void SetPreferredBitrate(sp_bitrate bitrate);
 
     // factory functions
-    virtual boost::shared_ptr<PlayList> CreatePlayList();
-    virtual boost::shared_ptr<PlayListContainer> CreatePlayListContainer();
-    virtual boost::shared_ptr<PlayListFolder> CreatePlayListFolder();
-    virtual boost::shared_ptr<Track> CreateTrack();
-    virtual boost::shared_ptr<Artist> CreateArtist();
-    virtual boost::shared_ptr<Album> CreateAlbum();
-    virtual boost::shared_ptr<Image> CreateImage();
+    boost::shared_ptr<PlayList> CreatePlayList();
+    boost::shared_ptr<PlayListContainer> CreatePlayListContainer();
+    boost::shared_ptr<PlayListFolder> CreatePlayListFolder();
+    boost::shared_ptr<Track> CreateTrack();
+    boost::shared_ptr<Artist> CreateArtist();
+    boost::shared_ptr<Album> CreateAlbum();
+    boost::shared_ptr<Image> CreateImage();
+
+    // connection functions for observers
+    void connectToOnLoggedIn(boost::function<void (sp_error)> callback); // NOLINT
+    void connectToOnNotifyMainThread(boost::function<void ()> callback); // NOLINT
 
   protected:
-    virtual void Shutdown();
-
-    // protected constructor, to force use of Create()
-    Session();
+    void Shutdown();
 
     // C++ Style member callbacks
-    virtual void OnLoggedIn(sp_error error);
-    virtual void OnLoggedOut();
-    virtual void OnMetadataUpdated();
-    virtual void OnConnectionError(sp_error error);
-    virtual void OnMessageToUser(const char *message);
-    virtual void OnNotifyMainThread();
-    virtual int  OnMusicDelivery(const sp_audioformat *format, const void *frames, int num_frames);
-    virtual void OnPlayTokenLost();
-    virtual void OnLogMessage(const char *data);
-    virtual void OnEndOfTrack();
-    virtual void OnStreamingError(sp_error error);
-    virtual void OnUserinfoUpdated();
-    virtual void OnStartPlayback();
-    virtual void OnStopPlayback();
-    virtual void OnGetAudioBufferStats(sp_audio_buffer_stats *stats);
+    void OnLoggedIn(sp_error error);
+    void OnLoggedOut();
+    void OnMetadataUpdated();
+    void OnConnectionError(sp_error error);
+    void OnMessageToUser(const char *message);
+    void OnNotifyMainThread();
+    int  OnMusicDelivery(const sp_audioformat *format, const void *frames, int num_frames);
+    void OnPlayTokenLost();
+    void OnLogMessage(const char *data);
+    void OnEndOfTrack();
+    void OnStreamingError(sp_error error);
+    void OnUserinfoUpdated();
+    void OnStartPlayback();
+    void OnStopPlayback();
+    void OnGetAudioBufferStats(sp_audio_buffer_stats *stats);
 
   private:
     friend class Image;
@@ -152,5 +152,7 @@ class LIBSPOTIFYPP_API Session : public boost::enable_shared_from_this<Session> 
     volatile bool is_process_events_required_;
     volatile bool has_logged_out_;
     boost::shared_ptr<Track> track_;  // currently playing track
+    boost::signal<void (sp_error)> on_loggedin_; // NOLINT
+    boost::signal<void ()> on_notify_main_thread_; // NOLINT
 };
 }
